@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/map'
 import { map, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { AccountService } from '../api/services';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private http: HttpClient) { }
+  constructor(private api: AccountService) { }
 
   public authorized(): boolean {
     return !!localStorage.getItem("currentUser");
   }
 
   login(email: string, password: string) {
-    return this.http.post<any>('/api/account/authenticate', { email: email, password: password }).pipe(
+    return this.api.Authenticate({ email: email, password: password }).pipe(
       map(user => {
         // login successful if there's a jwt token in the response
         if (user && user.token) {
@@ -26,7 +26,7 @@ export class AuthenticationService {
   }
 
   register(firstname: string, lastname: string, email: string, password: string) {
-    return this.http.post<any>('/api/account/register', { email: email, password: password, firstname: firstname, lastname: lastname }).pipe(
+    return this.api.Register({ email: email, password: password, firstname: firstname, lastname: lastname }).pipe(
       map(user => {
         // login successful if there's a jwt token in the response
         if (user && user.token) {
@@ -38,12 +38,8 @@ export class AuthenticationService {
       }));
   }
 
-  resetPassword(email: string, captcha: string): Observable<any> {
-    return this.http.post("/api/account/resetpassword", { email, captcha });
-  }
-
   refresh() {
-    return this.http.post<any>('/api/account/refresh', {})
+    return this.api.Refresh()
       .pipe(
         map(user => {
           // login successful if there's a jwt token in the response
@@ -76,7 +72,4 @@ export class AuthenticationService {
     return JSON.parse(localStorage.getItem('currentUser'));
   }
 
-  isAdmin(): Observable<boolean> {
-    return this.http.post<boolean>("api/account/isadmin", {});
-  }
 }
