@@ -1,8 +1,27 @@
-<h1>Введите интересующие вас услуги</h1>
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <h1>Выбор услуг</h1>
+    <ul>
+      <li class="category" *ngFor="let item of categories">
+        <label [innerHTML]="item.name"></label>
+        <ul>
+          <li>
+            <div class="checkbox checkbox-css p-b-5" *ngFor="let service of item.services">
+              <input type="checkbox" [checked]="checked(service)" (click)="check(service)" id="Service{{service.id}}">
+              <label for="Service{{service.id}}" [innerHTML]="service.name"></label>
+            </div>
 
-<div>
-  Выбор услуг
-  <a class="btn btn-primary" [routerLink]='["/suggestions"]'>
-    Выбрать
-  </a>
+          </li>
+        </ul>
+
+      </li>
+    </ul>
+
+    <div class="m-5 text-center">
+      <button class="btn btn-success m-r-10" [disabled]="disabled" (click)="search()">Поиск</button>
+      <button class="btn btn-default m-r-10" (click)="clear()">Очистить</button>
+    </div>
+  </div>
 </div>
+
+

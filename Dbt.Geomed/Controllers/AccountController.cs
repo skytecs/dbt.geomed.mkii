@@ -29,7 +29,7 @@ namespace Dbt.Geomed.Controllers
             //IOptions<CaptchaSettings> options
             )
         {
-            //_manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             //_notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             //_captchaService = captchaService ?? throw new ArgumentNullException(nameof(captchaService));
@@ -42,16 +42,17 @@ namespace Dbt.Geomed.Controllers
         }
 
         [HttpPost]
+        [Produces(typeof(LoggedInAccountModel))]
         public async Task<IActionResult> Authenticate([FromBody]AuthModel model)
         {
             if (String.IsNullOrWhiteSpace(model.Email))
             {
-                //return new ApiErrorActionResult("email", ApiParameterErrorCode.Required);
+                return BadRequest("email is required");
             }
 
             if (String.IsNullOrWhiteSpace(model.Password))
             {
-                //return new ApiErrorActionResult("password", ApiParameterErrorCode.Required);
+                return BadRequest("password is required");
             }
 
             var token = await _manager.Authenticate(model.Email, model.Password);
@@ -61,13 +62,14 @@ namespace Dbt.Geomed.Controllers
                 return Forbid();
             }
 
-            return Json(new { token = token.Data, expires = token.Expires.ToUnixTimeMilliseconds(), stale = token.Stale.ToUnixTimeMilliseconds() });
+            return Json(new LoggedInAccountModel { Token = token.Data, Expires = token.Expires.ToUnixTimeMilliseconds(), Stale = token.Stale.ToUnixTimeMilliseconds() });
         }
 
 
 
         [Authorize]
         [HttpPost]
+        [Produces(typeof(LoggedInAccountModel))]
         public async Task<IActionResult> Refresh()
         {
             var token = await _manager.Refresh(User);
@@ -77,42 +79,33 @@ namespace Dbt.Geomed.Controllers
                 return Forbid();
             }
 
-            return Json(new { token = token.Data, expires = token.Expires.ToUnixTimeMilliseconds(), stale = token.Stale.ToUnixTimeMilliseconds() });
+            return Json(new LoggedInAccountModel { Token = token.Data, Expires = token.Expires.ToUnixTimeMilliseconds(), Stale = token.Stale.ToUnixTimeMilliseconds() });
         }
 
         [HttpPost]
+        [Produces(typeof(LoggedInAccountModel))]
         public async Task<IActionResult> Register([FromBody]RegisterModel model)
         {
-            //if (String.IsNullOrWhiteSpace(model.Email))
-            //{
-            //    return new ApiErrorActionResult("email", ApiParameterErrorCode.Required);
-            //}
+            if (String.IsNullOrWhiteSpace(model.Email))
+            {
+                return BadRequest("email is required");
+            }
 
-            //if (String.IsNullOrWhiteSpace(model.Firstname))
-            //{
-            //    return new ApiErrorActionResult("firstname", ApiParameterErrorCode.Required);
-            //}
-
-            //if (String.IsNullOrWhiteSpace(model.Lastname))
-            //{
-            //    return new ApiErrorActionResult("lastName", ApiParameterErrorCode.Required);
-            //}
-
-            //if (String.IsNullOrWhiteSpace(model.Password))
-            //{
-            //    return new ApiErrorActionResult("password", ApiParameterErrorCode.Required);
-            //}
+            if (String.IsNullOrWhiteSpace(model.Password))
+            {
+                return BadRequest("password is required");
+            }
 
             Token token;
 
             try
             {
-                token = await _manager.Register(model.Firstname, model.Lastname, model.Email, model.Password);
+                token = await _manager.Register(model.Email, model.Password);
             }
-            //catch (InvalidOperationException ex)
-            //{
-            //    return new ApiErrorActionResult(ApiResponseStatus.EmailInUse);
-            //}
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest("email in use");
+            }
             catch (Exception ex)
             {
                 throw;
@@ -123,7 +116,7 @@ namespace Dbt.Geomed.Controllers
                 return Forbid();
             }
 
-            return Json(new { token = token.Data, expires = token.Expires.ToUnixTimeMilliseconds(), stale = token.Stale.ToUnixTimeMilliseconds() });
+            return Json(new LoggedInAccountModel { Token = token.Data, Expires = token.Expires.ToUnixTimeMilliseconds(), Stale = token.Stale.ToUnixTimeMilliseconds() });
         }
 
         //[Authorize]
@@ -170,6 +163,14 @@ namespace Dbt.Geomed.Controllers
         //    return new ApiErrorActionResult("email", ApiParameterErrorCode.Invalid);
         //}
 
+
+        public class LoggedInAccountModel
+        {
+            public string Token { get; internal set; }
+            public long Expires { get; internal set; }
+            public long Stale { get; internal set; }
+        }
+
         public class RegisterModel
         {
             public string Firstname { get; set; }
@@ -191,6 +192,12 @@ namespace Dbt.Geomed.Controllers
         }
 
     }
+
+    public enum ApiParameterErrorCode
+    {
+        Required = 1
+    }
+
     public class ChangePasswordModel
     {
         public string NewPassword { get; set; }

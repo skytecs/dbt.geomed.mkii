@@ -10,6 +10,7 @@ namespace Dbt.Geomed.Models
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Middlename { get; set; }
-
+        public string Password { get; internal set; }
+        public string Email { get; internal set; }
     }
 }

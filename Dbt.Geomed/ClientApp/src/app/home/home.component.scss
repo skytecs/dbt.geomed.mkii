@@ -1,0 +1,15 @@
+:host {
+  ul {
+    padding: 0;
+
+    li {
+      list-style-type: none;
+    }
+
+    li {
+      &.category {
+        padding: 5px;
+      }
+    }
+  }
+}

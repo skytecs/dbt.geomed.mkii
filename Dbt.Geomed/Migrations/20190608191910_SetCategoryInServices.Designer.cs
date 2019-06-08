@@ -3,15 +3,17 @@ using System;
 using Dbt.Geomed.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Dbt.Geomed.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190608191910_SetCategoryInServices")]
+    partial class SetCategoryInServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,11 +50,7 @@ namespace Dbt.Geomed.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<long?>("UserId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Companies");
                 });
@@ -121,13 +119,6 @@ namespace Dbt.Geomed.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Dbt.Geomed.Models.Company", b =>
-                {
-                    b.HasOne("Dbt.Geomed.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Dbt.Geomed.Models.Price", b =>
