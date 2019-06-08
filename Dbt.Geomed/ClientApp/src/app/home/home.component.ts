@@ -5,4 +5,16 @@ import { Component } from '@angular/core';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  private _step: number;
+
+  public constructor() {
+    this._step = 0;
+  }
+
+  public get step(): number { return this._step; }
+
+  public next = (): void => {
+    this._step++;
+  }
+
 }
