@@ -8,6 +8,10 @@ namespace Dbt.Geomed.ViewModels
 {
     public class CompanyViewModel
     {
+        public CompanyViewModel()
+        {
+            
+        }
         public CompanyViewModel(Company entity)
         {
             Id = entity.Id;
@@ -19,10 +23,10 @@ namespace Dbt.Geomed.ViewModels
         }
 
         public long Id { get; set; }
-
+        public long UserId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
-
+        public string Email { get; set; }
         public double Lng { get; set; }
         public double Lat { get; set; }
 
