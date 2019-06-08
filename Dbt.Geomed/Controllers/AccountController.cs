@@ -47,12 +47,12 @@ namespace Dbt.Geomed.Controllers
         {
             if (String.IsNullOrWhiteSpace(model.Email))
             {
-                //return new ApiErrorActionResult("email", ApiParameterErrorCode.Required);
+                return BadRequest("email is required");
             }
 
             if (String.IsNullOrWhiteSpace(model.Password))
             {
-                //return new ApiErrorActionResult("password", ApiParameterErrorCode.Required);
+                return BadRequest("password is required");
             }
 
             var token = await _manager.Authenticate(model.Email, model.Password);
@@ -88,34 +88,24 @@ namespace Dbt.Geomed.Controllers
         {
             if (String.IsNullOrWhiteSpace(model.Email))
             {
-                return new ApiErrorActionResult("email", ApiParameterErrorCode.Required);
-            }
-
-            if (String.IsNullOrWhiteSpace(model.Firstname))
-            {
-                return new ApiErrorActionResult("firstname", ApiParameterErrorCode.Required);
-            }
-
-            if (String.IsNullOrWhiteSpace(model.Lastname))
-            {
-                return new ApiErrorActionResult("lastName", ApiParameterErrorCode.Required);
+                return BadRequest("email is required");
             }
 
             if (String.IsNullOrWhiteSpace(model.Password))
             {
-                return new ApiErrorActionResult("password", ApiParameterErrorCode.Required);
+                return BadRequest("password is required");
             }
 
             Token token;
 
             try
             {
-                token = await _manager.Register(model.Firstname, model.Lastname, model.Email, model.Password);
+                token = await _manager.Register(model.Email, model.Password);
             }
-            //catch (InvalidOperationException ex)
-            //{
-            //    return new ApiErrorActionResult(ApiResponseStatus.EmailInUse);
-            //}
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest("email in use");
+            }
             catch (Exception ex)
             {
                 throw;
@@ -201,23 +191,6 @@ namespace Dbt.Geomed.Controllers
             public string Captcha { get; set; }
         }
 
-    }
-
-    internal class ApiErrorActionResult : IActionResult
-    {
-        public string FieldName;
-        private ApiParameterErrorCode ErrorCode;
-
-        public ApiErrorActionResult(string fieldName, ApiParameterErrorCode errorCode)
-        {
-            this.FieldName = fieldName;
-            this.ErrorCode = errorCode;
-        }
-
-        public Task ExecuteResultAsync(ActionContext context)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public enum ApiParameterErrorCode
