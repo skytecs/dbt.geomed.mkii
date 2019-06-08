@@ -1,0 +1,16 @@
+<form>
+  <div class="input-group">
+    <label class="control-label">
+      Название
+    </label>
+    <input class="input-control" [(ngModel)]="model.name" name="name" />
+  </div>
+  <div class="text-center">
+    <button type="button" class="btn btn-primary" (click)="save()">
+      Сохранить
+    </button>
+    <button type="button" class="btn btn-white">
+      Отменить
+    </button>
+  </div>
+</form>
