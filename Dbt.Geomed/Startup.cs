@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Dbt.Geomed.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,11 @@ namespace Dbt.Geomed
                     ClockSkew = TimeSpan.Zero
                 };
             });
+            
+            services.Configure<GeoServiceSettings>(Configuration.GetSection("GeoServiceSettings"));
+            services.AddTransient<GeoServiceSettings>();
+            
+            services.AddTransient<IGeoService, GoogleGeoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
