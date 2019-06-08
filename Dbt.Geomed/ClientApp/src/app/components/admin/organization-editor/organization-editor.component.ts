@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Organization } from './models/organization';
 import { OrganizationsEditorService } from './services/organizations-editor.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-organization-editor',
@@ -15,6 +16,10 @@ export class OrganizationEditorComponent implements OnInit {
   private _service: OrganizationsEditorService;
   private _route: ActivatedRoute;
   private _router: Router;
+
+  private _submitted: boolean;
+
+  @ViewChild("form") form: NgForm;
 
   constructor(
     organizationsEditorService: OrganizationsEditorService,
@@ -43,8 +48,21 @@ export class OrganizationEditorComponent implements OnInit {
   }
 
   public save = (): void => {
+    this._submitted = true;
+
+    if (this.form.invalid) {
+      return;
+    }
+
     if (!!this._model.id) {
       this._service.update(this._model)
+        .subscribe(
+          (): void => {
+            this._router.navigate(["admin", "organizations"]);
+          }
+        );
+    } else {
+      this._service.create(this._model)
         .subscribe(
           (): void => {
             this._router.navigate(["admin", "organizations"]);
@@ -54,6 +72,11 @@ export class OrganizationEditorComponent implements OnInit {
 
   }
 
+  public cancel = (): void => {
+    this._router.navigate(["admin", "organizations"]);
+  }
+
   public get model(): Organization { return this._model; }
+  public get submitted(): boolean { return this._submitted; }
 
 }

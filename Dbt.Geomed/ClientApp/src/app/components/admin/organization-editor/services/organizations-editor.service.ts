@@ -25,4 +25,8 @@ export class OrganizationsEditorService {
 
     return from([model]);
   }
+
+  public create = (model: Organization): Observable<Organization> => {
+    return from([model]);
+  }
 }
