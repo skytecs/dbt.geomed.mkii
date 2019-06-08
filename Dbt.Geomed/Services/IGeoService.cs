@@ -10,6 +10,7 @@ namespace Dbt.Geomed.Services
     public interface IGeoService
     {
         Task<string> GetAddress(Location location);
+        Task<Location> GetLocation(string address);
     }
     
  public class PlusCode
@@ -123,7 +124,7 @@ namespace Dbt.Geomed.Services
         public IList<string> Types { get; set; }
     }
 
-    public class GoogleData
+    public class GoogleGeocodeResult
     {
 
         [JsonProperty("plus_code")]
