@@ -1,8 +1,9 @@
 ﻿using Dbt.Geomed.Models;
 using Dbt.Geomed.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using NLog;
+using Microsoft.Extensions.Logging;
 using System.Linq;
+
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,12 +12,12 @@ namespace Dbt.Geomed.Controllers
     public class ApiOrganizationsController : Controller
     {
         private readonly IDataContext _dataContext;
-        private readonly ILogger _logger;
+        private readonly ILogger<ApiOrganizationsController> _logger;
 
-        public ApiOrganizationsController(IDataContext dataContext, ILogger logger)
+        public ApiOrganizationsController(IDataContext dataContext, ILogger<ApiOrganizationsController> logger)
         {
-            _dataContext = dataContext;
-            _logger = logger;
+            _dataContext = dataContext ?? throw new System.ArgumentNullException(nameof(dataContext));
+            _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
@@ -34,7 +35,7 @@ namespace Dbt.Geomed.Controllers
             var model = _dataContext.Companies.Where(x => x.Id == id).Select(x => new CompanyViewModel(x)).FirstOrDefault();
             if (model == null)
             {
-                _logger.Error($"Company '{id}' was not found.");
+                _logger.LogError($"Company '{id}' was not found.");
                 return NotFound(nameof(model));
             }
 
