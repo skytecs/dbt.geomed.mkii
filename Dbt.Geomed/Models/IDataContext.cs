@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dbt.Geomed.Models
 {
-    public interface IDataContext
+    public interface IDataContext 
     {
         DbSet<Service> Services { get; }
         DbSet<User> Users { get; }
