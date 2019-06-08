@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Dbt.Geomed
 {
@@ -63,6 +64,11 @@ namespace Dbt.Geomed
             
             services.AddTransient<IGeoService, GoogleGeoService>();
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Geomed API", Version = "v1" });
+            });
+
         }
 
         private void MigrateDatabase(IServiceProvider services)
@@ -90,6 +96,12 @@ namespace Dbt.Geomed
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

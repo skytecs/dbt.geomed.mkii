@@ -12,8 +12,9 @@ namespace Dbt.Geomed.Models
         DbSet<Service> Services { get; }
         DbSet<User> Users { get; }
         DbSet<Company> Companies { get; }
-
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        DbSet<Price> Prices { get; }
         
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+
     }
 }

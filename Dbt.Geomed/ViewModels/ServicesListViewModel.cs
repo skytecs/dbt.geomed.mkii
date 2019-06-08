@@ -7,6 +7,6 @@ namespace Dbt.Geomed.ViewModels
 {
     public class ServicesListViewModel
     {
-        List<long> ServiceIds { get; set; } 
+        public List<long> ServiceIds { get; set; } 
     }
 }
