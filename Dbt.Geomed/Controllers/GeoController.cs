@@ -12,9 +12,12 @@ namespace Dbt.Geomed.Controllers
             _geoService = geoService;
         }
         // GET
-        public async Task<string> Map(double lat, double lng)
+        public async Task<IActionResult> Map(double lat, double lng)
         {
-            return await _geoService.GetAddress(new Location{ Lat = lat, Lng = lng });
+            var address = await _geoService.GetAddress(new Location {Lat = lat, Lng = lng});
+            
+            return  address == null ? (IActionResult) NotFound("Geocoding API error") : Ok(address);
+            
         }
     }
 }

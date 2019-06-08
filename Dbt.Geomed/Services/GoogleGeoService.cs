@@ -29,7 +29,7 @@ namespace Dbt.Geomed.Services
             var request = new RestRequest();
             var response = await client.ExecuteGetTaskAsync<GoogleData>(request);
 
-            return response.Data.Status != "OK" ? "Geocoding API error" : response.Data.Results.FirstOrDefault()?.FormattedAddress;
+            return response.Data.Status != "OK" ? null : response.Data.Results.FirstOrDefault()?.FormattedAddress;
         }
 
         public string GetKey()
