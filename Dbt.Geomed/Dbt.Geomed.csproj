@@ -22,6 +22,7 @@
     <PackageReference Include="RestSharp" Version="106.6.9" />
     <PackageReference Include="Npgsql" Version="4.0.7" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
