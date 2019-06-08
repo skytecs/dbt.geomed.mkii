@@ -10,10 +10,43 @@
              #nameInput="ngModel"
              [(ngModel)]="model.name"
              [required]="true"
-             name="name" />
+             name="name"/>
     </div>
 
   </div>
+  <div class="input-group" [ngClass]="{'has-error': (addressInput.dirty || submitted) && addressInput.invalid}">
+    <div>
+      <label class="control-label">
+        Адрес
+      </label>
+    </div>
+    <div>
+      <input class="input-control"
+             #addressInput="ngModel"
+             [(ngModel)]="model.address"
+             [required]="true"
+             name="address"/>
+    </div>
+
+  </div>
+
+  <div class="input-group" [ngClass]="{'has-error': (emailInput.dirty || submitted) && emailInput.invalid}">
+    <div>
+      <label class="control-label">
+        Email
+      </label>
+    </div>
+    <div>
+      <input class="input-control"
+             #emailInput="ngModel"
+             [(ngModel)]="model.email"
+             [required]="true"
+             name="email"/>
+    </div>
+
+  </div>
+
+
   <div class="text-center">
     <button type="button" class="btn btn-primary" (click)="save()">
       Сохранить

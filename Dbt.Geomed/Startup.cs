@@ -38,6 +38,8 @@ namespace Dbt.Geomed
                     options.UseNpgsql(Configuration.GetConnectionString("Default"));
                 });
 
+            services.AddTransient<IUserManager, UserManager>();
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

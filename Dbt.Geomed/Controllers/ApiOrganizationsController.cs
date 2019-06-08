@@ -1,10 +1,13 @@
-﻿using Dbt.Geomed.Models;
+﻿using System;
+using Dbt.Geomed.Models;
 using Dbt.Geomed.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Dbt.Geomed.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 
@@ -59,5 +62,48 @@ namespace Dbt.Geomed.Controllers
             var result = await _geoService.GetDistanceMatrix(new Location {Lat = lat, Lng = lng}, models);
             return  result == null ? (IActionResult) NotFound("Geocoding API error") : Ok(result);
         }
+        
+        [HttpPost]
+        [Authorize]
+        [Route("api/organizations")]
+        public async Task<IActionResult> CreateOrganization(CompanyViewModel model)
+        {
+            var userId = ClaimsPrincipal.Current.GetId();
+            var storedModel = new Company {Name = model.Email, Address = model.Address, Email = model.Email, UserId = userId};
+            var location = _geoService.GetLocation(model.Address).Result;
+            if (location != null)
+            {
+                model.Lng = location.Lng;
+                model.Lat = location.Lat;  
+            }
+
+            
+            _dataContext.Companies.Add(storedModel);
+            
+            var updated = await _dataContext.SaveChangesAsync();
+            return updated == 1? (IActionResult) Ok(storedModel) : BadRequest();
+        }
+        
+        [HttpPut]
+        [Authorize]
+        [Route("api/organizations")]
+        public async Task<IActionResult> UpdateOrganization(CompanyViewModel model)
+        {
+
+            var storedModel = _dataContext.Companies.FirstOrDefault(x => x.Id == model.UserId);
+            if (storedModel == null)
+            {
+                return BadRequest();
+            }
+            
+            storedModel.Name = model.Name;
+            storedModel.Address = model.Address;
+            storedModel.Email = model.Email;
+            
+            var updated = await _dataContext.SaveChangesAsync();
+            return updated == 1? (IActionResult) Ok(storedModel) : BadRequest();
+        }
     }
+    
+   
 }

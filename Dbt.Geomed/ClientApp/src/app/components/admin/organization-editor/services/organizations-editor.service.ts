@@ -23,12 +23,36 @@ export class OrganizationsEditorService {
   };
 
   public update = (model: Organization): Observable<Organization> => {
+    const contract: OrganizationContract = this.CreateOrganizationContract(model);
 
+    this._httpClient.put<Organization>("api/organizations", contract);
     return from([model]);
   };
 
   public create = (model: Organization): Observable<Organization> => {
+    const contract: OrganizationContract = this.CreateOrganizationContract(model);
+
+    this._httpClient.post<OrganizationContract>("api/organizations", contract);
     return from([model]);
+  };
+
+  private CreateOrganizationContract = (organization: Organization): OrganizationContract => {
+    const contract: OrganizationContract = new OrganizationContract();
+
+    contract.id = organization.id;
+    contract.name = organization.name;
+    contract.email = organization.email;
+    contract.address = organization.address;
+    return contract;
   }
+}
+
+class OrganizationContract {
+  public id: number;
+  public name: string;
+  public address: string;
+  public email: string;
+  public lat: number;
+  public lng: number;
 }
 

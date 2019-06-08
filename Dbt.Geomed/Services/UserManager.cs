@@ -17,9 +17,9 @@ namespace Dbt.Geomed.Services
 {
     public interface IUserManager
     {
-        Task<Token> Authenticate(string username, string password);
+        Task<Token> Authenticate(string email, string password);
         Task<Token> Refresh(ClaimsPrincipal user);
-        Task<Token> Register(string firstname, string lastname, string username, string password);
+        Task<Token> Register(string email, string password);
         Task<User> Register(string name);
         Task<int> GetId(ClaimsPrincipal user);
 
@@ -58,14 +58,14 @@ namespace Dbt.Geomed.Services
     {
         private readonly TimeSpan _tokenLifetime = TimeSpan.FromDays(365);
 
-        private readonly DataContext _dataContext;
+        private readonly IDataContext _dataContext;
         private readonly IConfiguration _config;
 
         //private readonly AdministrationSettings _administrationSettings;
         //private readonly IMailNotificationService _notificationService;
 
         //public UserManager(DataContext dataContext, IConfiguration config, IOptions<AdministrationSettings> administrationSettings, IMailNotificationService notificationService)
-        public UserManager(DataContext dataContext, IConfiguration config)
+        public UserManager(IDataContext dataContext, IConfiguration config)
         {
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
             _config = config ?? throw new ArgumentNullException(nameof(config));
@@ -139,17 +139,15 @@ namespace Dbt.Geomed.Services
 
         }
 
-        public async Task<Token> Register(string firstname, string lastname, string username, string password)
+        public async Task<Token> Register(string username, string password)
         {
-            if (_dataContext.Users.Any(x => x.Firstname == firstname && x.Lastname == lastname))
+            if (_dataContext.Users.Any(x => x.Email == username))
             {
                 throw new InvalidOperationException($"Пользователь с логином '{username}' уже существует.");
             }
 
             var customer = new User
             {
-                Firstname = firstname,
-                Lastname = lastname,
                 Email = username.ToLowerInvariant(),
                 Password = ComputeHash(password)
             };
