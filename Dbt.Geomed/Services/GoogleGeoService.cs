@@ -27,9 +27,24 @@ namespace Dbt.Geomed.Services
             var url = $"https://maps.googleapis.com/maps/api/geocode/json?key={GetKey()}&language=ru&latlng={locString}";
             var client = new RestClient(url);
             var request = new RestRequest();
-            var response = await client.ExecuteGetTaskAsync<GoogleData>(request);
+            var response = await client.ExecuteGetTaskAsync<GoogleGeocodeResult>(request);
 
             return response.Data.Status != "OK" ? null : response.Data.Results.FirstOrDefault()?.FormattedAddress;
+        }
+
+        public async Task<Location> GetLocation(string address)
+        {
+            var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={GetKey()}&language=ru";
+
+            var client = new RestClient(url);
+            var request = new RestRequest();
+            request.AddHeader("Connection", "keep-alive");
+            request.AddHeader("Accept-Encoding", "gzip, deflate");
+            request.AddHeader("Cache-Control", "no-cache");
+            request.AddHeader("Accept", "*/*");
+            var response = await client.ExecuteTaskAsync<GoogleGeocodeResult>(request);
+
+            return response.Data.Results.FirstOrDefault()?.Geometry?.Location;
         }
 
         public string GetKey()
