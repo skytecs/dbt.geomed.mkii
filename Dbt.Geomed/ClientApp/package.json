@@ -50,6 +50,7 @@
     "karma-coverage-istanbul-reporter": "~1.4.2",
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "ng-swagger-gen": "^1.7.0-b",
     "typescript": "~2.7.2"
   },
   "optionalDependencies": {

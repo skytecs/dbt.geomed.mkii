@@ -14,5 +14,16 @@ namespace Dbt.Geomed.Models
         public string Subpart { get; set; }
         public string Group { get; set; }
         public string Subgroup { get; set; }
+
+        public string GetCode()
+        {
+            var code = $"{ServiceClass}{Part}.{Subpart}.{Group}";
+            if(!String.IsNullOrEmpty(Subgroup))
+            {
+                code = $"{code}.{Subgroup}";
+            }
+
+            return code;
+        }
     }
 }

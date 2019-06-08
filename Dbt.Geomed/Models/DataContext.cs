@@ -20,6 +20,6 @@ namespace Dbt.Geomed.Models
 
         public DbSet<Company> Companies { get; set; }
 
-
+        public DbSet<Price> Prices { get; set; }
     }
 }

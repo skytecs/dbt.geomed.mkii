@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dbt.Geomed.Models;
 using Dbt.Geomed.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NLog;
 
@@ -23,11 +24,27 @@ namespace Dbt.Geomed.Controllers
             _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
         }
 
-        //[HttpPost]
-        //[Route("api/services")]
-        //public IActionResult GetCompanyServicesInfo(ServicesListViewModel model)
-        //{
+        [HttpPost]
+        [Route("api/services")]
+        public IActionResult GetCompanyServicesInfo(ServicesListViewModel model)
+        {
+            try
+            {
+                var prices = _dataContext.Prices
+                    .Include(x => x.Service)
+                    .Include(x => x.Company)
+                    .Where(x => model.ServiceIds.Contains(x.ServiceId))
+                    .AsNoTracking()
+                    .ToList();
 
-        //}
+                return Ok(new PricesViewModel(prices));
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, e.Message);
+
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
