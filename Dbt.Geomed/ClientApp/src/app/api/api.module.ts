@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationInterface } from './api-configuration';
 
 import { ApiOrganizationsService } from './services/api-organizations.service';
+import { ApiServicesService } from './services/api-services.service';
 
 /**
  * Provider for all Api services, plus ApiConfiguration
@@ -18,7 +19,8 @@ import { ApiOrganizationsService } from './services/api-organizations.service';
   declarations: [],
   providers: [
     ApiConfiguration,
-    ApiOrganizationsService
+    ApiOrganizationsService,
+    ApiServicesService
   ],
 })
 export class ApiModule {
