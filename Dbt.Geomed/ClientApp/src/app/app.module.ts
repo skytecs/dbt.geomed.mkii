@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -22,6 +22,10 @@ import { LoginComponent } from './components/anonymous/login/login.component';
 import { RegisterComponent } from './components/anonymous/register/register.component';
 import { makeAnimationEvent } from '@angular/animations/browser/src/render/shared';
 import { MainComponent } from './components/main/main.component';
+import { AuthGuard } from './utility/auth.guard';
+import { ApiModule } from './api/api.module';
+import { JwtInterceptor } from './utility/jwt.interceptor';
+import { AuthenticationService } from './services/authentication.service';
 
 @NgModule({
   declarations: [
@@ -45,16 +49,18 @@ import { MainComponent } from './components/main/main.component';
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ApiModule,
     NgbModule.forRoot(),
     RouterModule.forRoot([
       { path: "", redirectTo: "/home", pathMatch: "full" },
       {
         path: "admin",
         component: AdminComponent,
+        canActivateChild: [AuthGuard],
         children: [
           {
             path: "",
-            data: { title: "Админимтрирование" },
+            data: { title: "Админиcтрирование" },
             component: DashboardComponent,
           },
           {
@@ -114,7 +120,14 @@ import { MainComponent } from './components/main/main.component';
 
     ])
   ],
-  providers: [],
+  providers: [
+    AuthenticationService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
