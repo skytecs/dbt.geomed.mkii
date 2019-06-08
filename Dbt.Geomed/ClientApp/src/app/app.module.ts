@@ -16,6 +16,7 @@ import { OrganizationEditorComponent } from './components/admin/organization-edi
 import { HeaderComponent } from './components/header/header.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SuggestionComponent } from './components/suggestion/suggestion.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ServiceEditorComponent,
     OrganizationsComponent,
     OrganizationEditorComponent,
-    HeaderComponent
+    HeaderComponent,
+    SuggestionComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,6 +39,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: "suggestions", component: SuggestionComponent },
       {
         path: "admin",
         component: AdminComponent,
