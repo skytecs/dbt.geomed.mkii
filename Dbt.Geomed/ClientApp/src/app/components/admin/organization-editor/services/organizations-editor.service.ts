@@ -18,15 +18,17 @@ export class OrganizationsEditorService {
     organization.lat = 25.5000;
     organization.lgt = 88.45;
 
+
     return from([organization]);
-  }
+  };
 
   public update = (model: Organization): Observable<Organization> => {
 
     return from([model]);
-  }
+  };
 
   public create = (model: Organization): Observable<Organization> => {
     return from([model]);
   }
 }
+
