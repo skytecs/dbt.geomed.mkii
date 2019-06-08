@@ -1,11 +1,8 @@
 <h1>Введите интересующие вас услуги</h1>
 
-<div *ngIf="step===0">
+<div>
   Выбор услуг
-  <button type="button" class="btn btn-primary" (click)="n">
+  <a class="btn btn-primary" [routerLink]='["/suggestions"]'>
     Выбрать
-  </button>
-</div>
-<div *ngIf="step===1">
-  Результат
+  </a>
 </div>

@@ -16,6 +16,12 @@ import { OrganizationEditorComponent } from './components/admin/organization-edi
 import { HeaderComponent } from './components/header/header.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SuggestionComponent } from './components/suggestion/suggestion.component';
+import { AnonymousComponent } from './components/anonymous/anonymous.component';
+import { LoginComponent } from './components/anonymous/login/login.component';
+import { RegisterComponent } from './components/anonymous/register/register.component';
+import { makeAnimationEvent } from '@angular/animations/browser/src/render/shared';
+import { MainComponent } from './components/main/main.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +34,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ServiceEditorComponent,
     OrganizationsComponent,
     OrganizationEditorComponent,
-    HeaderComponent
+    HeaderComponent,
+    SuggestionComponent,
+    AnonymousComponent,
+    LoginComponent,
+    RegisterComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,7 +47,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     NgbModule.forRoot(),
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: "", redirectTo: "/home", pathMatch: "full" },
       {
         path: "admin",
         component: AdminComponent,
@@ -77,7 +88,30 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
             ]
           }
         ]
+      },
+      {
+        path: "",
+        component: AnonymousComponent,
+        children: [
+          {
+            path: "login",
+            component: LoginComponent
+          },
+          {
+            path: "register",
+            component: RegisterComponent
+          }
+        ]
+      },
+      {
+        path: "",
+        component: MainComponent,
+        children: [
+          { path: 'home', component: HomeComponent },
+          { path: "suggestions", component: SuggestionComponent },
+        ]
       }
+
     ])
   ],
   providers: [],

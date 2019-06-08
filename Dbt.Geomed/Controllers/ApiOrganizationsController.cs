@@ -3,6 +3,7 @@ using Dbt.Geomed.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Threading.Tasks;
 using Dbt.Geomed.Services;
 using Microsoft.Extensions.Logging;
 
@@ -34,9 +35,9 @@ namespace Dbt.Geomed.Controllers
 
         [HttpGet]
         [Route("api/organizations/{id}")]
-        public IActionResult GetOrganization(long id)
+        public async Task<IActionResult> GetOrganization(long id)
         {
-            var model = _dataContext.Companies.Where(x => x.Id == id).Select(x => new CompanyViewModel(x)).FirstOrDefault();
+            var model = _dataContext.Companies.FirstOrDefault(x => x.Id == id);
             if (model == null)
             {
              _logger.LogError($"Company '{id}' was not found.");
@@ -46,8 +47,17 @@ namespace Dbt.Geomed.Controllers
             var location = _geoService.GetLocation(model.Address).Result;
             model.Lng = location.Lng;
             model.Lat = location.Lat;
-            _dataContext.SaveChangesAsync();
-            return Ok(model);
+            var res = await _dataContext.SaveChangesAsync();
+            return Ok(new CompanyViewModel(model));
+        }
+        
+        [HttpGet]
+        [Route("api/organizations/matrix")]
+        public async Task<IActionResult> GetOrganization(double lat, double lng)
+        {
+            var models = _dataContext.Companies.Where(x=>x.HasLocation()).ToList();
+            var result = await _geoService.GetDistanceMatrix(new Location {Lat = lat, Lng = lng}, models);
+            return  result == null ? (IActionResult) NotFound("Geocoding API error") : Ok(result);
         }
     }
 }
