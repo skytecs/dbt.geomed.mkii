@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dbt.Geomed.Models;
 using Newtonsoft.Json;
 
 namespace Dbt.Geomed.Services
@@ -11,6 +12,7 @@ namespace Dbt.Geomed.Services
     {
         Task<string> GetAddress(Location location);
         Task<Location> GetLocation(string address);
+        Task<GoogleDistanceMatrixResult> GetDistanceMatrix(Location location, List<Company> companies);
     }
     
  public class PlusCode
@@ -137,5 +139,59 @@ namespace Dbt.Geomed.Services
         public string Status { get; set; }
     }
 
+    public class Distance
+    {
 
+        [JsonProperty("text")]
+        public string Text { get; set; }
+
+        [JsonProperty("value")]
+        public int Value { get; set; }
+    }
+
+    public class Duration
+    {
+
+        [JsonProperty("text")]
+        public string Text { get; set; }
+
+        [JsonProperty("value")]
+        public int Value { get; set; }
+    }
+
+    public class Element
+    {
+
+        [JsonProperty("distance")]
+        public Distance Distance { get; set; }
+
+        [JsonProperty("duration")]
+        public Duration Duration { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+    }
+
+    public class Row
+    {
+
+        [JsonProperty("elements")]
+        public IList<Element> Elements { get; set; }
+    }
+
+    public class GoogleDistanceMatrixResult
+    {
+
+        [JsonProperty("destination_addresses")]
+        public IList<string> DestinationAddresses { get; set; }
+
+        [JsonProperty("origin_addresses")]
+        public IList<string> OriginAddresses { get; set; }
+
+        [JsonProperty("rows")]
+        public IList<Row> Rows { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+    }
 }
