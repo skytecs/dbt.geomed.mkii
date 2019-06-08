@@ -20,7 +20,7 @@ namespace Dbt.Geomed.Migrations
             migrationBuilder.AddColumn<long>(
                 name: "CategoryId",
                 table: "Services",
-                nullable: false,
+                nullable: true,
                 defaultValue: 0L);
 
             migrationBuilder.CreateTable(

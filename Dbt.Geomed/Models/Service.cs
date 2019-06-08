@@ -11,7 +11,7 @@ namespace Dbt.Geomed.Models
         public string Name { get; set; }
 
         [ForeignKey("Category")]
-        public long CategoryId { get; set; }
+        public long? CategoryId { get; set; }
         public virtual Category Category { get; set; }
 
         public string ServiceClass { get; set; }
