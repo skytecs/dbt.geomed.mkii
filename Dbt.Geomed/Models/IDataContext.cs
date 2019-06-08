@@ -15,5 +15,6 @@ namespace Dbt.Geomed.Models
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
+        DbSet<Price> Prices { get; }
     }
 }

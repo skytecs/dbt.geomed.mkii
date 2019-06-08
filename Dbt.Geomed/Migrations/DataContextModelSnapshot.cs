@@ -25,6 +25,8 @@ namespace Dbt.Geomed.Migrations
 
                     b.Property<string>("Address");
 
+                    b.Property<string>("Email");
+
                     b.Property<double>("Lat");
 
                     b.Property<double>("Lng");
@@ -34,6 +36,26 @@ namespace Dbt.Geomed.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("Dbt.Geomed.Models.Price", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Amount");
+
+                    b.Property<long>("CompanyId");
+
+                    b.Property<long>("ServiceId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("Prices");
                 });
 
             modelBuilder.Entity("Dbt.Geomed.Models.Service", b =>
@@ -72,6 +94,19 @@ namespace Dbt.Geomed.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Dbt.Geomed.Models.Price", b =>
+                {
+                    b.HasOne("Dbt.Geomed.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Dbt.Geomed.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

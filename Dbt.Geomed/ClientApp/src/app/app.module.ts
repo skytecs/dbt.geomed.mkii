@@ -13,6 +13,9 @@ import { ServicesComponent } from './components/admin/services/services.componen
 import { ServiceEditorComponent } from './components/admin/service-editor/service-editor.component';
 import { OrganizationsComponent } from './components/admin/organizations/organizations.component';
 import { OrganizationEditorComponent } from './components/admin/organization-editor/organization-editor.component';
+import { HeaderComponent } from './components/header/header.component';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -24,12 +27,14 @@ import { OrganizationEditorComponent } from './components/admin/organization-edi
     ServicesComponent,
     ServiceEditorComponent,
     OrganizationsComponent,
-    OrganizationEditorComponent
+    OrganizationEditorComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    NgbModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       {
