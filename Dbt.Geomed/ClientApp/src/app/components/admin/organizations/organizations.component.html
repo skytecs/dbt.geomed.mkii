@@ -3,17 +3,21 @@
     <th>
       Организация
     </th>
-    <th></th>
+    <th class="text-right">
+      <button type="button" class="btn btn-success" (click)="create()">
+        <i class="fa fa-plus"></i>
+      </button>
+    </th>
   </tr>
   <tr *ngFor="let item of collection">
     <td>
       <span [innerHTML]="item.name"></span>
     </td>
     <td class="buttons">
-      <button type="button" class="btn btn-primary">
+      <button type="button" class="btn btn-primary" (click)="edit(item)">
         <i class="fa fa-pencil"></i>
       </button>
-      <button type="button" class="btn btn-warning">
+      <button type="button" class="btn btn-warning" (click)="remove(item)">
         <i class="fa fa-trash"></i>
       </button>
     </td>

@@ -51,7 +51,11 @@ import { OrganizationEditorComponent } from './components/admin/organization-edi
             path: "organizations",
             children: [
               {
-                path: "{id}",
+                path: "add",
+                component: OrganizationEditorComponent
+              },
+              {
+                path: ":id",
                 component: OrganizationEditorComponent
               },
               {

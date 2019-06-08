@@ -14,13 +14,9 @@ export class OrganizationsService {
   }
 
   public load = (): Observable<Array<Organization>> => {
-    const o1: Organization = new Organization(1);
-    const o2: Organization = new Organization(2);
-    const o3: Organization = new Organization(3);
-
-    o1.name = "городская больница №1";
-    o2.name = "городская больница №2";
-    o3.name = "городская больница №4";
+    const o1: Organization = new Organization(1, "городская больница №1");
+    const o2: Organization = new Organization(2, "городская больница №2");
+    const o3: Organization = new Organization(3, "городская больница №4");
 
     const array: Array<Organization> = [o1, o2, o3];
 
