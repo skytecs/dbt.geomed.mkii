@@ -39,7 +39,7 @@ namespace Dbt.Geomed.Controllers
 
                 return Ok(new PricesViewModel(prices));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
 
@@ -69,6 +69,30 @@ namespace Dbt.Geomed.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+
+        [HttpGet]
+        [Route("api/categories")]
+        public IActionResult GetCagorieList()
+        {
+            try
+            {
+                var categories = _dataContext.Services
+                    .Include(x => x.Category)
+                    .Where(x => x.Category != null)
+                    .AsNoTracking()
+                    .ToList();
+
+                return Ok(new CategoriesListViewModel(categories));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+
+                return BadRequest(e.Message);
+            }
+        }
+
 
     }
 }

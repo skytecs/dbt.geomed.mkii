@@ -18,7 +18,7 @@
     </ul>
 
     <div class="m-5 text-center">
-      <button class="btn btn-success m-r-10">Поиск</button>
+      <button class="btn btn-success m-r-10" [disabled]="disabled" (click)="search()">Поиск</button>
       <button class="btn btn-default m-r-10" (click)="clear()">Очистить</button>
     </div>
   </div>

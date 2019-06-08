@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Category } from './models/category';
 import { Service } from './models/service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,9 @@ export class HomeComponent {
 
   private _selectedServices: Array<number>;
 
-  public constructor() {
+  private _router: Router;
+
+  public constructor(router: Router) {
     this._selectedServices = [];
 
     const category1 = new Category(1, "Узи");
@@ -33,6 +36,8 @@ export class HomeComponent {
       category1,
       category2
     ];
+
+    this._router = router;
   }
 
   public get categories(): Array<Category> { return this._categories; }
@@ -49,6 +54,18 @@ export class HomeComponent {
     } else {
       this._selectedServices.splice(index, 1);
     }
+  }
+
+  public get disabled(): boolean { return this._selectedServices.length === 0; }
+
+  public search = (): void => {
+    if (this._selectedServices.length === 0) {
+      return;
+    }
+
+    this._router.navigate(["suggestions"], { queryParams: { service: this._selectedServices } });
+
+
   }
 
   public clear = (): void => {
