@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Organization } from "../models/organization";
 import { Observable } from "rxjs";
 import { from } from 'rxjs';
+import { map } from "rxjs/operators";
 
 
 @Injectable()
@@ -14,12 +15,29 @@ export class OrganizationsService {
   }
 
   public load = (): Observable<Array<Organization>> => {
-    const o1: Organization = new Organization(1, "городская больница №1");
-    const o2: Organization = new Organization(2, "городская больница №2");
-    const o3: Organization = new Organization(3, "городская больница №4");
 
-    const array: Array<Organization> = [o1, o2, o3];
+    const url = "api/organizations";
+    return this._httpClient.get<Array<OrganizationContract>>(url)
+      .pipe(
+        map((value: Array<OrganizationContract>): Array<Organization> => {
+          return value.map((x: OrganizationContract): Organization => this.createOrganization(x));
+        })
+      );
+  };
 
-    return from([array]);
-  }
+  private createOrganization = (contract: OrganizationContract): Organization => {
+    const organization: Organization = new Organization(contract.id, contract.name, contract.address);
+
+    return organization;
+  };
+}
+
+
+
+class OrganizationContract {
+  public id: number;
+  public name: string;
+  public address: string;
+  public lat: number;
+  public lng: number;
 }
