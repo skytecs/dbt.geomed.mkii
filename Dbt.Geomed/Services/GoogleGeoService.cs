@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Dbt.Geomed.Models;
 using Microsoft.Extensions.Options;
 using RestSharp;
 
@@ -45,6 +47,22 @@ namespace Dbt.Geomed.Services
             var response = await client.ExecuteTaskAsync<GoogleGeocodeResult>(request);
 
             return response.Data.Results.FirstOrDefault()?.Geometry?.Location;
+        }
+
+        public async Task<GoogleDistanceMatrixResult> GetDistanceMatrix(Location location, List<Company> companies)
+        {
+           var originsString = $"{location.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}";
+           var destinationsString = "";
+            foreach (var company in companies)
+            {
+                destinationsString += $"{company.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}|";
+            }
+
+            var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={originsString}&destinations={destinationsString}&key={GetKey()}";
+            var client = new RestClient(url);
+            var request = new RestRequest();
+            var response = await client.ExecuteGetTaskAsync<GoogleDistanceMatrixResult>(request);
+            return response.Data.Status != "OK" ? null : response.Data;
         }
 
         public string GetKey()

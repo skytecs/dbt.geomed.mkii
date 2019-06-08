@@ -15,6 +15,11 @@ namespace Dbt.Geomed.Models
         public double Lng { get; set; }
         public double Lat { get; set; }
 
+        public bool HasLocation()
+        {
+            return Lng != 0.0 || Lat != 0.0;
+
+        }
 
 
     }

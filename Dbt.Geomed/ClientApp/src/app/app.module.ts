@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -17,6 +17,15 @@ import { HeaderComponent } from './components/header/header.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SuggestionComponent } from './components/suggestion/suggestion.component';
+import { AnonymousComponent } from './components/anonymous/anonymous.component';
+import { LoginComponent } from './components/anonymous/login/login.component';
+import { RegisterComponent } from './components/anonymous/register/register.component';
+import { makeAnimationEvent } from '@angular/animations/browser/src/render/shared';
+import { MainComponent } from './components/main/main.component';
+import { AuthGuard } from './utility/auth.guard';
+import { ApiModule } from './api/api.module';
+import { JwtInterceptor } from './utility/jwt.interceptor';
+import { AuthenticationService } from './services/authentication.service';
 
 @NgModule({
   declarations: [
@@ -30,23 +39,28 @@ import { SuggestionComponent } from './components/suggestion/suggestion.componen
     OrganizationsComponent,
     OrganizationEditorComponent,
     HeaderComponent,
-    SuggestionComponent
+    SuggestionComponent,
+    AnonymousComponent,
+    LoginComponent,
+    RegisterComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ApiModule,
     NgbModule.forRoot(),
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: "suggestions", component: SuggestionComponent },
+      { path: "", redirectTo: "/home", pathMatch: "full" },
       {
         path: "admin",
         component: AdminComponent,
+        canActivateChild: [AuthGuard],
         children: [
           {
             path: "",
-            data: { title: "Админимтрирование" },
+            data: { title: "Админиcтрирование" },
             component: DashboardComponent,
           },
           {
@@ -80,10 +94,40 @@ import { SuggestionComponent } from './components/suggestion/suggestion.componen
             ]
           }
         ]
+      },
+      {
+        path: "",
+        component: AnonymousComponent,
+        children: [
+          {
+            path: "login",
+            component: LoginComponent
+          },
+          {
+            path: "register",
+            component: RegisterComponent
+          }
+        ]
+      },
+      {
+        path: "",
+        component: MainComponent,
+        children: [
+          { path: 'home', component: HomeComponent },
+          { path: "suggestions", component: SuggestionComponent },
+        ]
       }
+
     ])
   ],
-  providers: [],
+  providers: [
+    AuthenticationService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

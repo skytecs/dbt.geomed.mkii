@@ -42,6 +42,7 @@ namespace Dbt.Geomed.Controllers
         }
 
         [HttpPost]
+        [Produces(typeof(LoggedInAccountModel))]
         public async Task<IActionResult> Authenticate([FromBody]AuthModel model)
         {
             if (String.IsNullOrWhiteSpace(model.Email))
@@ -61,13 +62,14 @@ namespace Dbt.Geomed.Controllers
                 return Forbid();
             }
 
-            return Json(new { token = token.Data, expires = token.Expires.ToUnixTimeMilliseconds(), stale = token.Stale.ToUnixTimeMilliseconds() });
+            return Json(new LoggedInAccountModel { Token = token.Data, Expires = token.Expires.ToUnixTimeMilliseconds(), Stale = token.Stale.ToUnixTimeMilliseconds() });
         }
 
 
 
         [Authorize]
         [HttpPost]
+        [Produces(typeof(LoggedInAccountModel))]
         public async Task<IActionResult> Refresh()
         {
             var token = await _manager.Refresh(User);
@@ -77,10 +79,11 @@ namespace Dbt.Geomed.Controllers
                 return Forbid();
             }
 
-            return Json(new { token = token.Data, expires = token.Expires.ToUnixTimeMilliseconds(), stale = token.Stale.ToUnixTimeMilliseconds() });
+            return Json(new LoggedInAccountModel { Token = token.Data, Expires = token.Expires.ToUnixTimeMilliseconds(), Stale = token.Stale.ToUnixTimeMilliseconds() });
         }
 
         [HttpPost]
+        [Produces(typeof(LoggedInAccountModel))]
         public async Task<IActionResult> Register([FromBody]RegisterModel model)
         {
             if (String.IsNullOrWhiteSpace(model.Email))
@@ -123,7 +126,7 @@ namespace Dbt.Geomed.Controllers
                 return Forbid();
             }
 
-            return Json(new { token = token.Data, expires = token.Expires.ToUnixTimeMilliseconds(), stale = token.Stale.ToUnixTimeMilliseconds() });
+            return Json(new LoggedInAccountModel { Token = token.Data, Expires = token.Expires.ToUnixTimeMilliseconds(), Stale = token.Stale.ToUnixTimeMilliseconds() });
         }
 
         //[Authorize]
@@ -169,6 +172,14 @@ namespace Dbt.Geomed.Controllers
 
         //    return new ApiErrorActionResult("email", ApiParameterErrorCode.Invalid);
         //}
+
+
+        public class LoggedInAccountModel
+        {
+            public string Token { get; internal set; }
+            public long Expires { get; internal set; }
+            public long Stale { get; internal set; }
+        }
 
         public class RegisterModel
         {

@@ -3,11 +3,6 @@
   <!-- begin navbar-header -->
   <div class="navbar-header">
     <a href="/" class="navbar-brand">Геомед</a>
-    <button type="button" class="navbar-toggle" (click)="mobileTopMenuToggle()">
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
   </div>
   <!-- end navbar-header -->
   <!-- begin header-nav -->
@@ -90,12 +85,15 @@
         <span class="d-none d-md-inline">Adam Schwartz</span> <b class="caret"></b>
       </a>
       <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-        <a href="javascript:;" class="dropdown-item">Edit Profile</a>
-        <a href="javascript:;" class="dropdown-item"><span class="badge badge-danger pull-right">2</span> Inbox</a>
-        <a href="javascript:;" class="dropdown-item">Calendar</a>
-        <a href="javascript:;" class="dropdown-item">Setting</a>
-        <div class="dropdown-divider"></div>
-        <a href="javascript:;" class="dropdown-item">Log Out</a>
+        <a class="dropdown-item"
+           [routerLink]='["/admin/organizations"]'>
+          Организации
+        </a>
+        <a class="dropdown-item"
+           [routerLink]='["/admin/services"]'>
+          Услуги
+        </a>
+
       </div>
     </li>
 

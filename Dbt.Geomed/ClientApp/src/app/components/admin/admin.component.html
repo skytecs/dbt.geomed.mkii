@@ -1,17 +1,20 @@
-<div class="menu">
-  <div class="list-group">
-    <a class="list-group-item list-group-item-action"
-       [routerLink]='["/admin/organizations"]'
-       [routerLinkActive]='["link-active"]'>
-      Организации
-    </a>
-    <a class="list-group-item list-group-item-action"
-       [routerLink]='["/admin/services"]'
-       [routerLinkActive]='["link-active"]'>
-      Услуги
-    </a>
+<header></header>
+<div class="container">
+  <div class="menu">
+    <div class="list-group">
+      <a class="list-group-item list-group-item-action"
+         [routerLink]='["/admin/organizations"]'
+         [routerLinkActive]='["link-active"]'>
+        Организации
+      </a>
+      <a class="list-group-item list-group-item-action"
+         [routerLink]='["/admin/services"]'
+         [routerLinkActive]='["link-active"]'>
+        Услуги
+      </a>
+    </div>
   </div>
-</div>
-<div class="inner-content">
-  <router-outlet></router-outlet>
+  <div class="inner-content">
+    <router-outlet></router-outlet>
+  </div>
 </div>
