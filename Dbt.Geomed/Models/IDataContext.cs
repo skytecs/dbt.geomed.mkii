@@ -14,6 +14,6 @@ namespace Dbt.Geomed.Models
         DbSet<Company> Companies { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-
+        
     }
 }
