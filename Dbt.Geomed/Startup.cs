@@ -32,8 +32,10 @@ namespace Dbt.Geomed
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<IDataContext, DataContext>(
-                options => options.UseNpgsql(Configuration.GetConnectionString("Default"))
-                );
+                options => {
+                    options.UseLazyLoadingProxies();
+                    options.UseNpgsql(Configuration.GetConnectionString("Default"));
+                });
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -60,6 +62,14 @@ namespace Dbt.Geomed
             services.AddTransient<GeoServiceSettings>();
             
             services.AddTransient<IGeoService, GoogleGeoService>();
+
+        }
+
+        private void MigrateDatabase(IServiceProvider services)
+        {
+            var context = services.GetService<IDataContext>() as DbContext;
+
+            context?.Database?.Migrate();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,6 +109,11 @@ namespace Dbt.Geomed
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                MigrateDatabase(scope.ServiceProvider);
+            }
         }
     }
 }
