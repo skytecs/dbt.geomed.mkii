@@ -8,7 +8,6 @@
     <div>
       <input class="input-control"
              #nameInput="ngModel"
-             [ngClass]="{'is-invalid': (nameInput.dirty || slotEditorSubmitted) && nameInput.invalid}"
              [(ngModel)]="model.name"
              [required]="true"
              name="name" />
