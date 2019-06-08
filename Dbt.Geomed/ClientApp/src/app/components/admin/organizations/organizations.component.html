@@ -5,9 +5,9 @@
     </th>
     <th></th>
   </tr>
-  <tr>
+  <tr *ngFor="let item of collection">
     <td>
-      Больница №1
+      <span [innerHTML]="item.name"></span>
     </td>
     <td class="buttons">
       <button type="button" class="btn btn-primary">
