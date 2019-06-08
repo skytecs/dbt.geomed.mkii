@@ -29,7 +29,7 @@ namespace Dbt.Geomed.Controllers
             //IOptions<CaptchaSettings> options
             )
         {
-            //_manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             //_notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             //_captchaService = captchaService ?? throw new ArgumentNullException(nameof(captchaService));
@@ -83,25 +83,25 @@ namespace Dbt.Geomed.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody]RegisterModel model)
         {
-            //if (String.IsNullOrWhiteSpace(model.Email))
-            //{
-            //    return new ApiErrorActionResult("email", ApiParameterErrorCode.Required);
-            //}
+            if (String.IsNullOrWhiteSpace(model.Email))
+            {
+                return new ApiErrorActionResult("email", ApiParameterErrorCode.Required);
+            }
 
-            //if (String.IsNullOrWhiteSpace(model.Firstname))
-            //{
-            //    return new ApiErrorActionResult("firstname", ApiParameterErrorCode.Required);
-            //}
+            if (String.IsNullOrWhiteSpace(model.Firstname))
+            {
+                return new ApiErrorActionResult("firstname", ApiParameterErrorCode.Required);
+            }
 
-            //if (String.IsNullOrWhiteSpace(model.Lastname))
-            //{
-            //    return new ApiErrorActionResult("lastName", ApiParameterErrorCode.Required);
-            //}
+            if (String.IsNullOrWhiteSpace(model.Lastname))
+            {
+                return new ApiErrorActionResult("lastName", ApiParameterErrorCode.Required);
+            }
 
-            //if (String.IsNullOrWhiteSpace(model.Password))
-            //{
-            //    return new ApiErrorActionResult("password", ApiParameterErrorCode.Required);
-            //}
+            if (String.IsNullOrWhiteSpace(model.Password))
+            {
+                return new ApiErrorActionResult("password", ApiParameterErrorCode.Required);
+            }
 
             Token token;
 
@@ -191,6 +191,29 @@ namespace Dbt.Geomed.Controllers
         }
 
     }
+
+    internal class ApiErrorActionResult : IActionResult
+    {
+        public string FieldName;
+        private ApiParameterErrorCode ErrorCode;
+
+        public ApiErrorActionResult(string fieldName, ApiParameterErrorCode errorCode)
+        {
+            this.FieldName = fieldName;
+            this.ErrorCode = errorCode;
+        }
+
+        public Task ExecuteResultAsync(ActionContext context)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public enum ApiParameterErrorCode
+    {
+        Required = 1
+    }
+
     public class ChangePasswordModel
     {
         public string NewPassword { get; set; }
