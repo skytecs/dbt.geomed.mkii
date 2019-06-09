@@ -34,6 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190609060017_AddsNhi.cs" />
+    <Compile Remove="Migrations\20190609060017_AddsNhi.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClientApp\src\app\components\admin\organization-editor\models\organization.ts" />
     <None Remove="ClientApp\src\app\components\admin\organization-editor\services\organizations-editor.service.ts" />
     <None Remove="ClientApp\src\app\components\admin\organizations\models\organization.ts" />

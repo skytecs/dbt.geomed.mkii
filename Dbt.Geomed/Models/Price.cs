@@ -18,6 +18,6 @@ namespace Dbt.Geomed.Models
 
         public decimal Amount { get; set; }
 
-        public bool IsNhi { get; set; }
+        public bool? IsNhi { get; set; }
     }
 }
