@@ -1,30 +1,40 @@
 <div class="panel panel-primary">
+  <div class="panel-body text-center">
+    <input type="text"
+           class="form-control"
+           placeholder="Поиск услуг"
+           [(ngModel)]="filterString"
+           (ngModelChange)="onFilterChange($event)" />
+  </div>
+</div>
+
+<div class="panel panel-primary">
   <div class="panel-body">
-    <h1>Выбор услуг</h1>
-    <div>
-      <input type="text" [(ngModel)]="filterString" (ngModelChange)="onFilterChange($event)"/>
-    </div>
-    <ul>
-      <li class="category" *ngFor="let item of categories">
-        <label [innerHTML]="item.name"></label>
-        <ul>
-          <li>
+
+    <div class="card-accordion">
+      <ngb-accordion #acc="ngbAccordion">
+        <ngb-panel class="category" *ngFor="let item of categories">
+          <ng-template ngbPanelTitle>
+            <span class="text-inverse" [innerHTML]="item.name">Collapsible Group Item #1</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+
             <div class="checkbox checkbox-css p-b-5" *ngFor="let service of item.services">
               <input type="checkbox" [checked]="checked(service)" (click)="check(service)" id="Service{{service.id}}">
               <label for="Service{{service.id}}" [innerHTML]="service.name"></label>
             </div>
 
-          </li>
-        </ul>
-
-      </li>
-    </ul>
-
-    <div class="m-5 text-center">
-      <button class="btn btn-success m-r-10" [disabled]="disabled" (click)="search()">Поиск</button>
-      <button class="btn btn-default m-r-10" (click)="clear()">Очистить</button>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
     </div>
+
   </div>
 </div>
 
-
+<div class="panel panel-primary">
+  <div class="panel-body text-center">
+    <button class="btn btn-default m-r-10" (click)="clear()">Очистить</button>
+    <button class="btn btn-primary m-r-10" [disabled]="disabled" (click)="search()">Поиск</button>
+  </div>
+</div>
