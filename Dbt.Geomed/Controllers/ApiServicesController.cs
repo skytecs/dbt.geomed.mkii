@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Dbt.Geomed.Models;
+﻿using Dbt.Geomed.Models;
 using Dbt.Geomed.Services;
 using Dbt.Geomed.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -70,7 +69,7 @@ namespace Dbt.Geomed.Controllers
                 List<CompanyDistance> matrix = new List<CompanyDistance>();
                 if (model.Lat.HasValue && model.Lng.HasValue)
                 {
-                    matrix = await _service.GetDistanceMatrix( new Location { Lng = model.Lng.Value, Lat = model.Lat.Value },
+                    matrix = await _service.GetDistanceMatrix(new Location { Lng = model.Lng.Value, Lat = model.Lat.Value },
                         prices.Select(x => x.Company).Distinct().ToList());
 
                 }
@@ -83,6 +82,22 @@ namespace Dbt.Geomed.Controllers
 
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpGet("/api/services/suggestions")]
+        [Produces(typeof(CategoryServiceItem[]))]
+        public async Task<IActionResult> GetServicesForSuggestions(List<long> id)
+        {
+            var services = await _dataContext.Services
+                .Where(x => id.Contains(x.Id))
+                .Select(x => new CategoryServiceItem
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                })
+                .ToListAsync();
+
+            return Ok(services);
         }
 
 

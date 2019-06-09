@@ -2,12 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { SuggestedOrganization } from './models/suggested-organization';
 import { SuggestedService } from './models/suggested-service';
 import { Service } from 'src/app/home/models/service';
-import { Router } from '@angular/router';
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { ApiServicesService } from 'src/app/api/services';
+import { Locator } from "src/app/services/locator";
+import { PricesViewModel, CompanyItem, ServiceItem, CategoryServiceItem } from 'src/app/api/models';
+import { Organization } from '../admin/organizations/models/organization';
+import { subscribeOn } from 'rxjs/operators';
 @Component({
   selector: 'app-suggestion',
   templateUrl: './suggestion.component.html',
-  styleUrls: ['./suggestion.component.css']
+  styleUrls: ['./suggestion.component.css'],
+  providers: [Locator, ApiServicesService]
 })
 export class SuggestionComponent implements OnInit {
   private _services: Array<Service>;
@@ -16,22 +21,17 @@ export class SuggestionComponent implements OnInit {
   private _selectedSort: SortOrder;
 
   private _router: Router;
+  private _service: ApiServicesService;
+  private _locatior: Locator;
+  private _activatedRoute: ActivatedRoute;
 
-  constructor(router: Router) {
+  constructor(router: Router, servicesApi: ApiServicesService, locator: Locator, activatedRoute: ActivatedRoute) {
     this._router = router;
+    this._locatior = locator;
+    this._service = servicesApi;
+    this._activatedRoute = activatedRoute;
 
-    let org1 = new SuggestedOrganization(1, "Городская больница №1", "ул. Ленина, 28", 6000);
-    org1.services = [
-      new SuggestedService(1, "УЗИ почек", 1500, false, org1.id),
-      new SuggestedService(2, "Первичная консультация кардиолога", undefined, true, org1.id),
-    ];
-
-    let org2 = new SuggestedOrganization(1, "Психоневрологический диспансер", "ул. Зоологическая, 19", 3200);
-    org2.services = [
-      new SuggestedService(3, "УЗИ почек", 1200, false, org2.id),
-    ];
-
-    this._organizations = [org1, org2];
+    this._organizations = [];
 
     this._services = [
       new Service(1, "УЗИ почек", 1),
@@ -43,6 +43,38 @@ export class SuggestionComponent implements OnInit {
   }
 
   ngOnInit() {
+    let serviceIds: Array<number> = this._activatedRoute.snapshot
+      .queryParamMap.getAll("service").map(value => parseInt(value));
+
+    this._service.GetServicesForSuggestions(serviceIds)
+      .subscribe((result: Array<CategoryServiceItem>): void => {
+        this._services = result.map((x: CategoryServiceItem): Service => new Service(x.id, x.name, 0));
+      });
+
+    this._locatior.getPosition().then((value: any): void => {
+      this._service.GetServicesList({ ServiceIds: serviceIds, Lng: value.longitude, Lat: value.latitude })
+        .subscribe((result: PricesViewModel): void => {
+          this._organizations = result.companies.map((o: CompanyItem): SuggestedOrganization => {
+            const organization: SuggestedOrganization = new SuggestedOrganization(o.id, o.name, "", o.distance);
+
+            organization.services = o.services.map((s: ServiceItem): SuggestedService => {
+              const service: SuggestedService = new SuggestedService(s.id, s.name, s.amount, s.isNhi, o.id);
+
+              return service;
+
+            });
+
+            return organization;
+          });
+        })
+
+      console.info(value);
+    });
+
+  }
+
+  public get filters(): string {
+    return this._services.map((x: Service): string => x.name).join(", ");
   }
 
   public get organizations(): Array<SuggestedOrganization> { return this._organizations; }
