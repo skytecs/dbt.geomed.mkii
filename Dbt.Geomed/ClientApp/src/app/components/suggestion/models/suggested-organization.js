@@ -47,10 +47,10 @@ var SuggestedOrganization = /** @class */ (function () {
                 return "N/A";
             }
             if (this._distance < 1000) {
-                return ">1км";
+                return ">1 км";
             }
             var rounded = Math.round(this._distance / 1000);
-            return rounded + "\u043A\u043C";
+            return rounded + " \u043A\u043C";
         },
         enumerable: true,
         configurable: true

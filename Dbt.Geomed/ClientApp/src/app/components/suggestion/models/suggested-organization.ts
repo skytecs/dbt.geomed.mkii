@@ -42,12 +42,12 @@ export class SuggestedOrganization {
     }
 
     if (this._distance < 1000) {
-      return ">1км";
+      return ">1 км";
     }
 
     let rounded: number = Math.round(this._distance / 1000);
 
-    return `${rounded}км`;
+    return `${rounded} км`;
   }
 
   public get displayedPrice(): string {
