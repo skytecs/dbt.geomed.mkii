@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,14 +33,21 @@ namespace Dbt.Geomed.Controllers
             return  location == null ? (IActionResult) NotFound("Geocoding API error") : Ok(location);
             
         }
-        
-        public async Task<IActionResult> Map(double lat, double lng)
+        [HttpGet]
+        public async Task<IActionResult> Map(MapModel model)
         {
-            var markers = _dataContext.Companies.Where(x => x.HasLocation()).Select(x => new Location {Lat = x.Lat, Lng = x.Lng}).ToList();
-            var map = await _geoService.GetPicture(new Location {Lat = lat, Lng = lng}, markers);
+            var markers = _dataContext.Companies.Where(x=>model.Companies.Contains(x.Id)).Where(x => x.HasLocation()).Select(x => new Location {Lat = x.Lat, Lng = x.Lng}).ToList();
+            var map = await _geoService.GetPicture(new Location {Lat = model.Lat, Lng = model.Lng}, markers);
 
-            return File(map, "image/png");
+            return (IActionResult) Ok("data:image/png;base64," + Convert.ToBase64String(map));
 
+        }
+        
+        public class MapModel
+        {
+            public double Lat { get; set; }
+            public double Lng { get; set; }
+            public List<long> Companies { get; set; }
         }
     }
 }

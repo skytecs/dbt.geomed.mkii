@@ -39,13 +39,13 @@ namespace Dbt.Geomed.Controllers
 
             foreach (var companyItem in prices.GroupBy(x => x.Email))
             {
-                if (!string.IsNullOrEmpty(companyItem.Key))
+                if (string.IsNullOrEmpty(companyItem.Key))
                 {
                     continue;
                 }
 
                 var subject = "Вам лид от Геомеда";
-                var template = $@"Пациент {model.Lastname} {model.Firstname} моб. тел.{model.Phone} записался на следующие услуги:\n{String.Join("\n", companyItem.Select(x => x.Name))}";
+                var template = $"Пациент {model.Lastname} {model.Firstname} моб. тел. {model.Phone} записался на следующие услуги:\n{String.Join("\n", companyItem.Select(x => x.Name))}";
 
                 await _mailService.SendAsync(subject, template, companyItem.Key);
             }

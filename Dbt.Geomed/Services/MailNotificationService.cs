@@ -59,12 +59,11 @@ namespace Dbt.Geomed.Services
                 CreateClient();
             }
 
-            var message = new MailMessage();
+            var message = new MailMessage(new MailAddress(_settings.Value.From), new MailAddress(email));
             message.Subject = subject;
             message.Body = template;
-            message.To.Add(new MailAddress(email));
 
-            await _client.SendMailAsync(message);
+             await  _client.SendMailAsync(message);
         }
 
         private void CreateClient()

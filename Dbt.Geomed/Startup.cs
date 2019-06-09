@@ -64,7 +64,10 @@ namespace Dbt.Geomed
             
             services.Configure<GeoServiceSettings>(Configuration.GetSection("GeoServiceSettings"));
             services.AddTransient<GeoServiceSettings>();
-            
+
+            services.Configure<MailNotificationSettings>(Configuration.GetSection("MailNotificationSettings"));
+            services.AddTransient<MailNotificationSettings>();
+
             services.AddTransient<IGeoService, GoogleGeoService>();
 
             services.AddSwaggerGen(c =>
