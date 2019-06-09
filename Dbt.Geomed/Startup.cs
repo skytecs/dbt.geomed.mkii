@@ -39,6 +39,7 @@ namespace Dbt.Geomed
                 });
 
             services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IMailNotificationService, MailNotificationService>();            
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
