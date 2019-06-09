@@ -17,9 +17,9 @@
     </span>
 
     <strong>Сортировать по:</strong>
-    <a href="javascript:;" class="m-l-5">Числу совпадений</a>
-    <a href="javascript:;" class="active m-l-5 f-w-700">Цене</a>
-    <a href="javascript:;" class="m-l-5">Расстоянию</a>
+    <a href="javascript:;" (click)="sortBy(1)" [ngClass]="{'f-w-700':sortOrder === 1}" class="m-l-5">Числу совпадений</a>
+    <a href="javascript:;" (click)="sortBy(2)" [ngClass]="{'f-w-700':sortOrder === 2}" class="active m-l-5">Цене</a>
+    <a href="javascript:;" (click)="sortBy(3)" [ngClass]="{'f-w-700':sortOrder === 3}" class="m-l-5">Расстоянию</a>
   </div>
   <span>
   </span>
@@ -28,25 +28,22 @@
 <div class="panel panel-primary">
   <div class="panel-body">
     <div class="widget-list widget-list-rounded m-b-30" data-id="widget">
-      <div class="widget-list-item">
+      <div class="widget-list-item" *ngFor="let item of organizations">
         <div class="widget-list-media icon">
-          <span class="badge bg-lime"><span style="font-size:1.3em">2/2</span></span>
+          <span class="badge bg-lime">
+            <span style="font-size:1.3em">
+              <span [innerHtml]="item.length"></span>/<span [innerHTML]="services.length"></span>
+            </span>
+          </span>
         </div>
         <div class="widget-list-content">
-          <h4 class="widget-list-title">Городская больница №6</h4>
-          <p class="widget-list-desc">ул. Ленина, 28</p>
+          <h4 class="widget-list-title" [innerHtml]="item.name"></h4>
+          <p class="widget-list-desc" [innerHtml]="item.address"></p>
           <div class="widget-list-desc">
-            <div class="input-group  m-b-3">
+            <div class="input-group  m-b-3" *ngFor="let service of item.services">
               <span class="checkbox checkbox-css">
-                <input type="checkbox" id="service1" value="">
-                <label for="service1">УЗИ почек - 1500₽</label>
-              </span>
-            </div>
-
-            <div class="input-group m-b-3">
-              <span class="checkbox checkbox-css">
-                <input type="checkbox" id="service2" value="">
-                <label for="service2"> Первичная консультация кардиолога - по ОМС</label>
+                <input type="checkbox" id="service{{service.id}}" value="">
+                <label for="service{{service.id}}"><span [innerHtml]="service.name"></span> - <span [innerHTML]="service.displayedPrice"></span></label>
               </span>
             </div>
           </div>
@@ -55,15 +52,17 @@
         </div>
 
         <div class="widget-list-media icon">
-          <span class="badge bg-yellow"><span style="font-size:1.3em">3км</span></span>
+          <span class="badge " [ngClass]="{'bg-yellow':!item.close, 'bg-lime':item.close}">
+            <span style="font-size:1.3em" [innerHTML]="item.displayedDistance">3км</span>
+          </span>
         </div>
 
         <div class="widget-list-action text-right">
-          <h4 class="widget-list-title">1500₽ </h4>
-          <p class="widget-list-desc text-muted">за&nbsp;2&nbsp;услугу</p>
+          <h4 class="widget-list-title" [innerHtml]="item.displayedPrice"></h4>
+          <p class="widget-list-desc text-muted" [innerHtml]="item.totalFor"></p>
         </div>
       </div>
-      <div class="widget-list-item">
+      <!--<div class="widget-list-item">
         <div class="widget-list-media icon">
           <span class="badge bg-yellow"><span style="font-size:1.3em">1/2</span></span>
         </div>
@@ -88,7 +87,7 @@
           <h4 class="widget-list-title">1100₽ </h4>
           <p class="widget-list-desc text-muted">за&nbsp;1&nbsp;услугу</p>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </div>

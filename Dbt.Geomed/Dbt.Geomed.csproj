@@ -43,6 +43,8 @@
     <None Remove="ClientApp\src\app\components\admin\organization-editor\services\organizations-editor.service.ts" />
     <None Remove="ClientApp\src\app\components\admin\organizations\models\organization.ts" />
     <None Remove="ClientApp\src\app\components\admin\organizations\services\organizations.service.ts" />
+    <None Remove="ClientApp\src\app\components\suggestion\models\suggested-organization.ts" />
+    <None Remove="ClientApp\src\app\components\suggestion\models\suggested-service.ts" />
     <None Remove="ClientApp\src\app\home\models\category.ts" />
     <None Remove="ClientApp\src\app\home\models\service.ts" />
     <None Remove="ClientApp\src\app\home\service\home.services.ts" />
@@ -53,6 +55,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\components\admin\organization-editor\services\organizations-editor.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\admin\organizations\models\organization.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\admin\organizations\services\organizations.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\suggestion\models\suggested-organization.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\suggestion\models\suggested-service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\home\models\category.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\home\models\service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\home\service\home.services.ts" />
