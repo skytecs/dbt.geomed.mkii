@@ -63,12 +63,32 @@ namespace Dbt.Geomed.Services
             var client = new RestClient(url);
             var request = new RestRequest();
             var response = await client.ExecuteGetTaskAsync<GoogleDistanceMatrixResult>(request);
-            return companies.Select(x => new CompanyDistance { Location = location, CompanyId = x.Id, Distance = new Random().Next(100) }).ToList();
+            var output = new List<CompanyDistance>();
+            var distances = response.Data.Rows.FirstOrDefault()?.Elements;
+            var i = 0;
+            foreach (var c in companies)
+            {
+                if (distances != null)
+                    output.Add(new CompanyDistance
+                    {
+                        Location = new Location {Lat = c.Lat, Lng = c.Lng},
+                        CompanyId = c.Id, Distance = distances[i].Distance.Value, Time = RusTime(distances[i].Duration)
+                    });
+                i++;
+            }
+
+            return output;
         }
 
-        public string GetKey()
+        private string GetKey()
         {
             return _settings.Value.ApiKey;
+        }
+
+        private string RusTime(Duration duration)
+        {
+            var time = duration.Text;
+            return time.Replace("min", "мин.").Replace("h", "ч").Replace("s","");
         }
     }
 }

@@ -5,5 +5,6 @@
         public Location Location { get; set; }
         public long CompanyId { get; set; }
         public double Distance { get; set; }
+        public string Time { get; set; }
     }
 }

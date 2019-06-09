@@ -12,14 +12,14 @@ export class OrganizationsEditorService {
 
   public load = (id: number): Observable<Organization> => {
 
-    let organization = this.api.GetOrganization(id).pipe(map(item => {
+    let  organization = this.api.GetOrganization(id).pipe(map(item => {
       var result = new Organization(item.id);
       result.address = item.address;
       result.email = item.email;
       result.lat = item.lat;
       result.lgt = item.lng;
       result.name = item.name;
-
+      return result;
 
     }));
 
@@ -27,15 +27,23 @@ export class OrganizationsEditorService {
   };
 
   public update = (model: Organization): Observable<Organization> => {
-    this.api.UpdateOrganization({
+    return this.api.UpdateOrganization({
       Address: model.address,
       Email: model.email,
       Id: model.id,
       Lat: model.lat,
       Lng: model.lgt,
       Name: model.name
-    });
-    return from([model]);
+    }).pipe(map(item => {
+      var result = new Organization(item.id);
+      result.address = item.address;
+      result.email = item.email;
+      result.lat = item.lat;
+      result.lgt = item.lng;
+      result.name = item.name;
+      return result;
+    }));
+
   };
 
   public create = (model: Organization): Observable<Organization> => {
