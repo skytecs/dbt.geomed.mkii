@@ -73,8 +73,30 @@ var SuggestedOrganization = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(SuggestedOrganization.prototype, "total", {
+        get: function () { return this._total; },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(SuggestedOrganization.prototype, "length", {
         get: function () { return this._services.length; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SuggestedOrganization.prototype, "totalFor", {
+        get: function () {
+            var p = this._services.length % 10;
+            switch (p) {
+                case 1:
+                    return "\u0437\u0430 " + this.length + " \u0443\u0441\u043B\u0443\u0433\u0443";
+                case 2:
+                case 3:
+                case 4:
+                    return "\u0437\u0430 " + this.length + " \u0443\u0441\u043B\u0443\u0433\u0438";
+                default:
+                    return "\u0437\u0430 " + this.length + " \u0443\u0441\u043B\u0443\u0433";
+            }
+        },
         enumerable: true,
         configurable: true
     });

@@ -30,7 +30,7 @@
     <div class="widget-list widget-list-rounded m-b-30" data-id="widget">
       <div class="widget-list-item" *ngFor="let item of organizations">
         <div class="widget-list-media icon">
-          <span class="badge bg-lime">
+          <span class="badge bg-lime" [ngClass]="{'bg-yellow':!item.length < services.length, 'bg-lime':item.length === services.length}">
             <span style="font-size:1.3em">
               <span [innerHtml]="item.length"></span>/<span [innerHTML]="services.length"></span>
             </span>
@@ -42,7 +42,7 @@
           <div class="widget-list-desc">
             <div class="input-group  m-b-3" *ngFor="let service of item.services">
               <span class="checkbox checkbox-css">
-                <input type="checkbox" id="service{{service.id}}" value="">
+                <input type="checkbox" id="service{{service.id}}" [checked]="checked(service)" (click)="check(service)">
                 <label for="service{{service.id}}"><span [innerHtml]="service.name"></span> - <span [innerHTML]="service.displayedPrice"></span></label>
               </span>
             </div>
@@ -94,11 +94,11 @@
 
 <div class="panel panel-primary">
   <div class="panel-body text-center">
-    <button class="btn btn-default m-r-10" type="button">
+    <button class="btn btn-default m-r-10" type="button" (click)="clear()">
       Сбросить
     </button>
 
-    <button class="btn btn-primary m-r-10" type="button" (click)="forward()">
+    <button class="btn btn-primary m-r-10" type="button" (click)="next()" [disabled]="disabled">
       Далее
     </button>
   </div>

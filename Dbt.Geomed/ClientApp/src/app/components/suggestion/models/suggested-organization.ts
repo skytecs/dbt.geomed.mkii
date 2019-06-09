@@ -72,15 +72,12 @@ export class SuggestedOrganization {
     switch (p) {
       case 1:
         return `за ${this.length} услугу`;
-        break;
       case 2:
       case 3:
       case 4:
         return `за ${this.length} услуги`;
-        break;
       default:
         return `за ${this.length} услуг`;
-        break;
     }
 
   }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SuggestedOrganization } from './models/suggested-organization';
 import { SuggestedService } from './models/suggested-service';
 import { Service } from 'src/app/home/models/service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-suggestion',
@@ -10,13 +11,16 @@ import { Service } from 'src/app/home/models/service';
 })
 export class SuggestionComponent implements OnInit {
   private _services: Array<Service>;
-
+  private _selectedServices: Array<number>;
   private _organizations: Array<SuggestedOrganization>;
-
   private _selectedSort: SortOrder;
 
-  constructor() {
-    let org1 = new SuggestedOrganization(1, "Городская больница №1", "ул. Ленина, 28", 900);
+  private _router: Router;
+
+  constructor(router: Router) {
+    this._router = router;
+
+    let org1 = new SuggestedOrganization(1, "Городская больница №1", "ул. Ленина, 28", 6000);
     org1.services = [
       new SuggestedService(1, "УЗИ почек", 1500, false, org1.id),
       new SuggestedService(2, "Первичная консультация кардиолога", undefined, true, org1.id),
@@ -35,6 +39,7 @@ export class SuggestionComponent implements OnInit {
     ];
 
     this._selectedSort = SortOrder.Catch;
+    this._selectedServices = [];
   }
 
   ngOnInit() {
@@ -72,6 +77,33 @@ export class SuggestionComponent implements OnInit {
 
   }
 
+  public checked = (item: SuggestedService): boolean => {
+    return this._selectedServices.some((x: number): boolean => x === item.id);
+  }
+
+  public check = (item: SuggestedService): void => {
+    let index: number = this._selectedServices.findIndex((x: number): boolean => x === item.id);
+
+    if (index === -1) {
+      this._selectedServices.push(item.id);
+    } else {
+      this._selectedServices.splice(index, 1);
+    }
+
+  }
+
+  public clear = (): void => {
+    this._selectedServices = [];
+  }
+
+  public get disabled(): boolean { return this._selectedServices.length === 0; }
+
+  public next = (): void => {
+    if (this._selectedServices.length === 0) {
+      return;
+    }
+    this._router.navigate(["cart"], { queryParams: { service: this._selectedServices } });
+  }
 }
 
 enum SortOrder {
