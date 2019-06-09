@@ -9,6 +9,7 @@ import { map as __map, filter as __filter } from 'rxjs/operators';
 
 import { PricesViewModel } from '../models/prices-view-model';
 import { CategoriesListViewModel } from '../models/categories-list-view-model';
+import { CartPricesViewModel } from '../models/cart-prices-view-model';
 @Injectable({
   providedIn: 'root',
 })
@@ -16,6 +17,7 @@ class ApiServicesService extends __BaseService {
   static readonly GetServicesListPath = '/api/services';
   static readonly GetCompanyServicesInfoPath = '/api/services';
   static readonly GetCategoriesListPath = '/api/categories';
+  static readonly GetCartPricesPath = '/api/cartprices';
 
   constructor(
     config: __Configuration,
@@ -158,6 +160,42 @@ class ApiServicesService extends __BaseService {
   GetCategoriesList(): __Observable<CategoriesListViewModel> {
     return this.GetCategoriesListResponse().pipe(
       __map(_r => _r.body as CategoriesListViewModel)
+    );
+  }
+
+  /**
+   * @param priceIds undefined
+   * @return Success
+   */
+  GetCartPricesResponse(priceIds?: Array<number>): __Observable<__StrictHttpResponse<CartPricesViewModel>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+    (priceIds || []).forEach(val => {if (val != null) __params = __params.append('priceIds', val.toString())});
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/api/cartprices`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<CartPricesViewModel>;
+      })
+    );
+  }
+  /**
+   * @param priceIds undefined
+   * @return Success
+   */
+  GetCartPrices(priceIds?: Array<number>): __Observable<CartPricesViewModel> {
+    return this.GetCartPricesResponse(priceIds).pipe(
+      __map(_r => _r.body as CartPricesViewModel)
     );
   }
 }

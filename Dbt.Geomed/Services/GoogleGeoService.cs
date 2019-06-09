@@ -80,6 +80,29 @@ namespace Dbt.Geomed.Services
             return output;
         }
 
+        public async Task<byte[]> GetPicture(Location center, List<Location> locations, int zoom = 12)
+        {
+            var centerString = $"{center.Lat.ToString("00.000", _nfi)},{center.Lng.ToString("00.000", _nfi)}";
+            var url = $"https://maps.googleapis.com/maps/api/staticmap?size=800x400&maptype=roadmap&key={GetKey()}&language=ru&center={centerString}&zoom={zoom}";
+            int i = 1;
+            foreach (var location in locations)
+            {
+                var locationString = $"{location.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}";
+                url += $"&markers=color:red|label:{i++}|{locationString}";
+            }
+ 
+                var client = new RestClient(url);
+
+                var request = new RestRequest();
+                request.AddHeader("Connection", "keep-alive");
+                request.AddHeader("Accept-Encoding", "gzip, deflate");
+                request.AddHeader("Cache-Control", "no-cache");
+                request.AddHeader("Accept", "*/*");
+                var response = await client.ExecuteGetTaskAsync(request);
+
+                return response.RawBytes;
+        }
+
         private string GetKey()
         {
             return _settings.Value.ApiKey;

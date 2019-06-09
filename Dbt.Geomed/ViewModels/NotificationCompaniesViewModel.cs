@@ -7,10 +7,10 @@ namespace Dbt.Geomed.ViewModels
 {
     public class NotificationCompaniesViewModel
     {
-        public long UserId { get; set; }
-
-        private List<NotifyingCompanyItem> _companies  = new List<NotifyingCompanyItem>();
-        public List<NotifyingCompanyItem> Companies { get { return _companies; } }
+        public string Lastname { get; set; }
+        public string Firstname { get; set; }
+        public string Phone { get; set; }
+        public List<long> PriceIds { get; set; }
     }
 
     public class NotifyingCompanyItem

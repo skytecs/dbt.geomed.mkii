@@ -6,6 +6,7 @@ using Dbt.Geomed.Models;
 using Dbt.Geomed.Services;
 using Dbt.Geomed.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,33 +30,24 @@ namespace Dbt.Geomed.Controllers
         [Route("api/notifycompanies")]
         public async Task<IActionResult> NotifyCompanies(NotificationCompaniesViewModel model)
         {
-            var user = _context.Users.Where(x => x.Id == model.UserId).FirstOrDefault();
-            if (user == null)
-            {
-                _logger.LogError($"User '{model.UserId}' was not found.");
-                return NotFound(nameof(user));               
-            }
+            var prices = _context.Prices
+                .Include(x => x.Service)
+                .Include(x => x.Company)
+                .Where(x => model.PriceIds.Contains(x.Id))
+                .Select(x => new { x.Company.Email, x.Service.Name })
+                .ToList();
 
-
-            foreach (var companyItem in model.Companies)
+            foreach (var companyItem in prices.GroupBy(x => x.Email))
             {
-                var company = _context.Companies.FirstOrDefault(x => x.Id == companyItem.Id);
-                if (company == null)
+                if (!string.IsNullOrEmpty(companyItem.Key))
                 {
-                    _logger.LogError($"Company '{companyItem.Id}' was not found.");
-                    continue;    // ??                    
+                    continue;
                 }
 
-                if (String.IsNullOrEmpty(company.Email))
-                {
-                    _logger.LogError($"Company '{companyItem.Id}' has no '{nameof(company.Email)}'.");
-                    continue;    // ??                    
-                }
-                
-                var subject = companyItem.Name;
-                var template = $@"Пациент {user.GetFullName()} записался на следующте услуг:\n{String.Join("\n", companyItem.Services.Select(x => x.Name))}";
+                var subject = "Вам лид от Геомеда";
+                var template = $@"Пациент {model.Lastname} {model.Firstname} моб. тел.{model.Phone} записался на следующие услуг:\n{String.Join("\n", companyItem.Select(x => x.Name))}";
 
-                await _mailService.SendAsync(subject, template, company.Email);
+                await _mailService.SendAsync(subject, template, companyItem.Key);
             }
             return Ok();
         }

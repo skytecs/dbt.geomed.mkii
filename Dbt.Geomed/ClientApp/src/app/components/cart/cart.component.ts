@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-cart',
@@ -7,13 +8,20 @@ import {Router} from "@angular/router";
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  private _router: Router;
-  constructor(router: Router)
-  {
-    this._router = router;
+  private _location: Location;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, location: Location) {
+    this._location = location;
   }
 
+  private _priceIds: Array<number> = [];
+
   ngOnInit() {
+    this._priceIds = this.activatedRoute.snapshot.queryParamMap.getAll("service").map(value => parseInt(value));
+  }
+
+  public goBack = (): void => {
+    this._location.back();
   }
 
 }

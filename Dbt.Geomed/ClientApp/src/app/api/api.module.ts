@@ -6,6 +6,7 @@ import { ApiConfiguration, ApiConfigurationInterface } from './api-configuration
 import { AccountService } from './services/account.service';
 import { ApiOrganizationsService } from './services/api-organizations.service';
 import { ApiServicesService } from './services/api-services.service';
+import { EmailNotificationsService } from './services/email-notifications.service';
 
 /**
  * Provider for all Api services, plus ApiConfiguration
@@ -22,7 +23,8 @@ import { ApiServicesService } from './services/api-services.service';
     ApiConfiguration,
     AccountService,
     ApiOrganizationsService,
-    ApiServicesService
+    ApiServicesService,
+    EmailNotificationsService
   ],
 })
 export class ApiModule {
