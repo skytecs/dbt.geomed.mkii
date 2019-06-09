@@ -10,7 +10,9 @@ import { Location } from '@angular/common';
 export class CartComponent implements OnInit {
   private _location: Location;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, location: Location) {
+    this._location = location;
+  }
 
   private _priceIds: Array<number> = [];
 
