@@ -15,7 +15,7 @@ import { CategoriesListViewModel } from '../models/categories-list-view-model';
 class ApiServicesService extends __BaseService {
   static readonly GetServicesListPath = '/api/services';
   static readonly GetCompanyServicesInfoPath = '/api/services';
-  static readonly GetCagorieListPath = '/api/categories';
+  static readonly GetCategoriesListPath = '/api/categories';
 
   constructor(
     config: __Configuration,
@@ -131,7 +131,7 @@ class ApiServicesService extends __BaseService {
   /**
    * @return Success
    */
-  GetCagorieListResponse(): __Observable<__StrictHttpResponse<CategoriesListViewModel>> {
+  GetCategoriesListResponse(): __Observable<__StrictHttpResponse<CategoriesListViewModel>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -155,8 +155,8 @@ class ApiServicesService extends __BaseService {
   /**
    * @return Success
    */
-  GetCagorieList(): __Observable<CategoriesListViewModel> {
-    return this.GetCagorieListResponse().pipe(
+  GetCategoriesList(): __Observable<CategoriesListViewModel> {
+    return this.GetCategoriesListResponse().pipe(
       __map(_r => _r.body as CategoriesListViewModel)
     );
   }
