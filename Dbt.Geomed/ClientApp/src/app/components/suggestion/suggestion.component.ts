@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-suggestion',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SuggestionComponent implements OnInit {
 
-  constructor() { }
+  private _router: Router;
+  constructor(router: Router)
+  {
+    this._router = router;
+  }
 
   ngOnInit() {
   }
-
+  public forward = (): void => {
+    this._router.navigate(["cart"]);
+  }
 }

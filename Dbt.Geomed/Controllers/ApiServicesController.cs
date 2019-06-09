@@ -109,6 +109,13 @@ namespace Dbt.Geomed.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("api/categories")]
+        public IActionResult Book(CartViewModel cvm)
+        {
+            return Ok();
+        }
+
 
     }
 }
