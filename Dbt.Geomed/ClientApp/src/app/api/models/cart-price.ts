@@ -5,4 +5,5 @@ export interface CartPrice {
   amount?: number;
   isNhi?: boolean;
   company?: string;
+  address?: string;
 }

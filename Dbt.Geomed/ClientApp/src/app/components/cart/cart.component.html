@@ -21,16 +21,17 @@
 
 
           <tbody>
-            <tr>
+            <tr *ngFor="var item of cartItems">
               <td>
-                УЗИ почек
+                {{item.name}}
               </td>
               <td>
-                1400 р.
+                {{item.price}} р.
               </td>
               <td>
-                Городская больница №4 города Ростова-на-Дону
-                <div style="color: gray" class="stats-desc">Ростов-на-Дону, проспект Стачки, д. 226</div>
+                {{item.company}} р.
+
+                <div style="color: gray" class="stats-desc">{{item.address}}</div>
               </td>
             </tr>
             <tr>
@@ -60,16 +61,13 @@
         <h4>Данные пациента:</h4>
         <form>
           <div class="form-group row m-b-15">
-            <input class="form-control" name="firstName" ngModel placeholder="Имя">
+            <input class="form-control" name="firstName" [(ngModel)]="firstName" placeholder="Имя">
           </div>
           <div class="form-group row m-b-15">
-            <input class="form-control" name="lastName" ngModel placeholder="Фамилия">
+            <input class="form-control" name="lastName" [(ngModel)]="lastName" placeholder="Фамилия">
           </div>
           <div class="form-group row m-b-15">
-            <input class="form-control" name="phone" ngModel placeholder="Номер телефона">
-          </div>
-          <div class="form-group row m-b-15">
-            <input class="form-control" name="email" ngModel placeholder="Email">
+            <input class="form-control" name="phone" [(ngModel)]="phone" placeholder="Номер телефона">
           </div>
         </form>
       </div>
@@ -84,7 +82,7 @@
         <button class="btn btn-default m-r-10" type="button" (click)="goBack()">
           Назад
         </button>
-        <button type="submit"
+        <button (click)="submit()"
                 class="btn btn-primary m-r-5">
           Отправить заявку
         </button>
