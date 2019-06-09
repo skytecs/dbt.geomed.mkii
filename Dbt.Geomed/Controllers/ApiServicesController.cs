@@ -144,7 +144,8 @@ namespace Dbt.Geomed.Controllers
                     Name = x.Service.Name,
                     Amount = x.Amount,
                     Company = x.Company.Name,
-                    IsNhi = x.IsNhi
+                    IsNhi = x.IsNhi,
+                    Address = x.Company.Address
                 }).ToList();
             }
 
@@ -155,6 +156,7 @@ namespace Dbt.Geomed.Controllers
                 public decimal Amount { get; set; }
                 public bool? IsNhi { get; set; }
                 public string Company { get; set; }
+                public string Address { get; internal set; }
             }
         }
     }
