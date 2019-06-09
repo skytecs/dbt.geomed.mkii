@@ -45,7 +45,7 @@ namespace Dbt.Geomed.Controllers
                 }
 
                 var subject = "Вам лид от Геомеда";
-                var template = $@"Пациент {model.Lastname} {model.Firstname} моб. тел.{model.Phone} записался на следующие услуг:\n{String.Join("\n", companyItem.Select(x => x.Name))}";
+                var template = $@"Пациент {model.Lastname} {model.Firstname} моб. тел.{model.Phone} записался на следующие услуги:\n{String.Join("\n", companyItem.Select(x => x.Name))}";
 
                 await _mailService.SendAsync(subject, template, companyItem.Key);
             }
