@@ -57,14 +57,13 @@ namespace Dbt.Geomed.Controllers
         {
             try
             {
-
-
-                var prices = _dataContext.Prices
+                var query = _dataContext.Prices
                     .Include(x => x.Service)
                     .Include(x => x.Company)
                     .Where(x => model.ServiceIds.Contains(x.ServiceId))
-                    .AsNoTracking()
-                    .ToList();
+                    .AsNoTracking();
+
+                var prices = query.ToList();
 
                 List<CompanyDistance> matrix = new List<CompanyDistance>();
                 if (model.Lat.HasValue && model.Lng.HasValue)

@@ -20,6 +20,10 @@ export class SuggestionComponent implements OnInit {
   private _organizations: Array<SuggestedOrganization>;
   private _selectedSort: SortOrder;
 
+  private _serviceIds: Array<number>;
+  private _lat: number;
+  private _lng: number;
+
   private _router: Router;
   private _service: ApiServicesService;
   private _locatior: Locator;
@@ -32,6 +36,7 @@ export class SuggestionComponent implements OnInit {
     this._activatedRoute = activatedRoute;
 
     this._organizations = [];
+    this._serviceIds = [];
 
     this._services = [
       new Service(1, "УЗИ почек", 1),
@@ -43,32 +48,19 @@ export class SuggestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    let serviceIds: Array<number> = this._activatedRoute.snapshot
+    this._serviceIds = this._activatedRoute.snapshot
       .queryParamMap.getAll("service").map(value => parseInt(value));
 
-    this._service.GetServicesForSuggestions(serviceIds)
+    this._service.GetServicesForSuggestions(this._serviceIds)
       .subscribe((result: Array<CategoryServiceItem>): void => {
         this._services = result.map((x: CategoryServiceItem): Service => new Service(x.id, x.name, 0));
       });
 
     this._locatior.getPosition().then((value: any): void => {
-      this._service.GetServicesList({ ServiceIds: serviceIds, Lng: value.longitude, Lat: value.latitude })
-        .subscribe((result: PricesViewModel): void => {
-          this._organizations = result.companies.map((o: CompanyItem): SuggestedOrganization => {
-            const organization: SuggestedOrganization = new SuggestedOrganization(o.id, o.name, "", o.distance);
+      this._lat = value.latitude;
+      this._lng = value.longitude;
 
-            organization.services = o.services.map((s: ServiceItem): SuggestedService => {
-              const service: SuggestedService = new SuggestedService(s.id, s.name, s.amount, s.isNhi, o.id);
-
-              return service;
-
-            });
-
-            return organization;
-          });
-        })
-
-      console.info(value);
+      this.reload();
     });
 
   }
@@ -124,6 +116,34 @@ export class SuggestionComponent implements OnInit {
 
   }
 
+  private _omsOnly: boolean;
+  private _commercialOnly: boolean;
+
+  public get omsOnly(): boolean { return this._omsOnly; }
+  public get commercialOnly(): boolean { return this._commercialOnly; }
+
+  public toggleOmsOnly = (): void => {
+    if (this._omsOnly) {
+      this._omsOnly = false;
+    } else {
+      this._omsOnly = true;
+      this._commercialOnly = false;
+    }
+
+    this.reload();
+  }
+
+  public toggleCommercialOnly = (): void => {
+    if (this._commercialOnly) {
+      this._commercialOnly = false;
+    } else {
+      this._commercialOnly = true;
+      this._omsOnly = false;
+    }
+
+    this.reload();
+  }
+
   public clear = (): void => {
     this._selectedServices = [];
   }
@@ -135,6 +155,35 @@ export class SuggestionComponent implements OnInit {
       return;
     }
     this._router.navigate(["cart"], { queryParams: { service: this._selectedServices } });
+  }
+
+  public reload = (): void => {
+
+    let params: any = {
+      ServiceIds: this._serviceIds,
+      Lng: this._lng,
+      Lat: this._lat,
+      RestrictToCommercial: this._commercialOnly,
+      RestrictToFree: this._omsOnly
+    };
+
+    this._service.GetServicesList(params)
+      .subscribe((result: PricesViewModel): void => {
+        this._organizations = result.companies.map((o: CompanyItem): SuggestedOrganization => {
+          const organization: SuggestedOrganization = new SuggestedOrganization(o.id, o.name, "", o.distance);
+
+          organization.services = o.services.map((s: ServiceItem): SuggestedService => {
+            const service: SuggestedService = new SuggestedService(s.id, s.name, s.amount, s.isNhi, o.id);
+
+            return service;
+
+          });
+
+          return organization;
+        });
+      })
+
+
   }
 }
 
