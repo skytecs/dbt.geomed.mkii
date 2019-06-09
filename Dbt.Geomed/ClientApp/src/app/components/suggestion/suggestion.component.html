@@ -96,6 +96,13 @@
 
 <div class="panel panel-primary">
   <div class="panel-body text-center">
+    <img [src]="src" *ngIf="showMap"/>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-body text-center">
     <button class="btn btn-default m-r-10" type="button" (click)="clear()">
       Сбросить
     </button>

@@ -6,8 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiServicesService } from 'src/app/api/services';
 import { Locator } from "src/app/services/locator";
 import { PricesViewModel, CompanyItem, ServiceItem, CategoryServiceItem } from 'src/app/api/models';
-import { Organization } from '../admin/organizations/models/organization';
-import { subscribeOn } from 'rxjs/operators';
+
 @Component({
   selector: 'app-suggestion',
   templateUrl: './suggestion.component.html',
@@ -29,6 +28,9 @@ export class SuggestionComponent implements OnInit {
   private _locatior: Locator;
   private _activatedRoute: ActivatedRoute;
 
+  private _showMap: boolean;
+  private _src: string;
+
   constructor(router: Router, servicesApi: ApiServicesService, locator: Locator, activatedRoute: ActivatedRoute) {
     this._router = router;
     this._locatior = locator;
@@ -38,10 +40,7 @@ export class SuggestionComponent implements OnInit {
     this._organizations = [];
     this._serviceIds = [];
 
-    this._services = [
-      new Service(1, "УЗИ почек", 1),
-      new Service(2, "Первичная консультация кардиолога", 1)
-    ];
+    this._services = [];
 
     this._selectedSort = SortOrder.Catch;
     this._selectedServices = [];
@@ -60,10 +59,18 @@ export class SuggestionComponent implements OnInit {
       this._lat = value.latitude;
       this._lng = value.longitude;
 
+      let parts: Array<string> = this._serviceIds.map((x: number): string => `companies=${x}`);
+
+      this._src = `/Geo/Map?lat=${this._lat}&lng=${this._lng}&${parts.join("&")}`;
+      this._showMap = true;
+
       this.reload();
     });
 
   }
+
+  public get showMap(): boolean { return this._showMap; }
+  public get src(): string { return this._src; }
 
   public get filters(): string {
     return this._services.map((x: Service): string => x.name).join(", ");
