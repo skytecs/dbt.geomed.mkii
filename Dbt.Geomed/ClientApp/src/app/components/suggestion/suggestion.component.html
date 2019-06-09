@@ -6,6 +6,27 @@
 
 <div class="panel panel-primary">
   <div class="panel-body">
+    <span class="checkbox checkbox-css m-r-10">
+      <input type="checkbox" id="omsOnly" value="">
+      <label for="omsOnly">Только ОМС</label>
+    </span>
+
+    <span class="checkbox checkbox-css m-r-15">
+      <input type="checkbox" id="payedOnly" value="">
+      <label for="payedOnly">Только платные</label>
+    </span>
+
+    <strong>Сортировать по:</strong>
+    <a href="javascript:;" class="m-l-5">Числу совпадений</a>
+    <a href="javascript:;" class="active m-l-5 f-w-700">Цене</a>
+    <a href="javascript:;" class="m-l-5">Расстоянию</a>
+  </div>
+  <span>
+  </span>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-body">
     <div class="widget-list widget-list-rounded m-b-30" data-id="widget">
       <div class="widget-list-item">
         <div class="widget-list-media icon">
@@ -14,12 +35,32 @@
         <div class="widget-list-content">
           <h4 class="widget-list-title">Городская больница №6</h4>
           <p class="widget-list-desc">ул. Ленина, 28</p>
-          <p class="widget-list-desc">
-            <span class="text-muted"> УЗИ почек, Первичная консультация кардиолога</span>
-          </p>
+          <div class="widget-list-desc">
+            <div class="input-group  m-b-3">
+              <span class="checkbox checkbox-css">
+                <input type="checkbox" id="service1" value="">
+                <label for="service1">УЗИ почек - 1500₽</label>
+              </span>
+            </div>
+
+            <div class="input-group m-b-3">
+              <span class="checkbox checkbox-css">
+                <input type="checkbox" id="service2" value="">
+                <label for="service2"> Первичная консультация кардиолога - по ОМС</label>
+              </span>
+            </div>
+          </div>
+
+
         </div>
+
+        <div class="widget-list-media icon">
+          <span class="badge bg-yellow"><span style="font-size:1.3em">3км</span></span>
+        </div>
+
         <div class="widget-list-action text-right">
-          <i class="fa fa-angle-right fa-lg text-muted"></i>
+          <h4 class="widget-list-title">1500₽ </h4>
+          <p class="widget-list-desc text-muted">за&nbsp;2&nbsp;услугу</p>
         </div>
       </div>
       <div class="widget-list-item">
@@ -29,14 +70,38 @@
         <div class="widget-list-content">
           <h4 class="widget-list-title">Психоневрологический диспансер </h4>
           <p class="widget-list-desc">ул. Зоологическая, 19</p>
-          <p class="widget-list-desc">
-            <span class="text-muted"> УЗИ почек</span>
-          </p>
+          <div class="widget-list-desc">
+            <div class="input-group m-b-3">
+              <span class="checkbox checkbox-css">
+                <input type="checkbox" id="service3" value="">
+                <label for="service3">УЗИ почек - 1100₽</label>
+              </span>
+            </div>
+          </div>
         </div>
+
+        <div class="widget-list-media icon">
+          <span class="badge bg-lime"><span style="font-size:1.3em">>1 км</span></span>
+        </div>
+
         <div class="widget-list-action text-right">
-          <i class="fa fa-angle-right fa-lg text-muted"></i>
+          <h4 class="widget-list-title">1100₽ </h4>
+          <p class="widget-list-desc text-muted">за&nbsp;1&nbsp;услугу</p>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<div class="panel panel-primary">
+  <div class="panel-body text-center">
+    <button class="btn btn-default m-r-10" type="button">
+      Сбросить
+    </button>
+
+    <button class="btn btn-primary m-r-10" type="button" (click)="forward()">
+      Далее
+    </button>
+  </div>
+</div>
+

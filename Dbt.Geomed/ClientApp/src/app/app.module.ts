@@ -26,6 +26,7 @@ import { AuthGuard } from './utility/auth.guard';
 import { ApiModule } from './api/api.module';
 import { JwtInterceptor } from './utility/jwt.interceptor';
 import { AuthenticationService } from './services/authentication.service';
+import { CartComponent } from './components/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AuthenticationService } from './services/authentication.service';
     AnonymousComponent,
     LoginComponent,
     RegisterComponent,
-    MainComponent
+    MainComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -115,6 +117,7 @@ import { AuthenticationService } from './services/authentication.service';
         children: [
           { path: 'home', component: HomeComponent },
           { path: "suggestions", component: SuggestionComponent },
+          { path: "cart", component: CartComponent }
         ]
       }
 
@@ -127,7 +130,7 @@ import { AuthenticationService } from './services/authentication.service';
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
-    }  ],
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

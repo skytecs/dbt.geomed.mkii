@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -49,10 +50,10 @@ namespace Dbt.Geomed.Services
             return response.Data.Results.FirstOrDefault()?.Geometry?.Location;
         }
 
-        public async Task<GoogleDistanceMatrixResult> GetDistanceMatrix(Location location, List<Company> companies)
+        public async Task<List<CompanyDistance>> GetDistanceMatrix(Location location, List<Company> companies)
         {
-           var originsString = $"{location.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}";
-           var destinationsString = "";
+            var originsString = $"{location.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}";
+            var destinationsString = "";
             foreach (var company in companies)
             {
                 destinationsString += $"{company.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}|";
@@ -62,12 +63,32 @@ namespace Dbt.Geomed.Services
             var client = new RestClient(url);
             var request = new RestRequest();
             var response = await client.ExecuteGetTaskAsync<GoogleDistanceMatrixResult>(request);
-            return response.Data.Status != "OK" ? null : response.Data;
+            var output = new List<CompanyDistance>();
+            var distances = response.Data.Rows.FirstOrDefault()?.Elements;
+            var i = 0;
+            foreach (var c in companies)
+            {
+                if (distances != null)
+                    output.Add(new CompanyDistance
+                    {
+                        Location = new Location {Lat = c.Lat, Lng = c.Lng},
+                        CompanyId = c.Id, Distance = distances[i].Distance.Value, Time = RusTime(distances[i].Duration)
+                    });
+                i++;
+            }
+
+            return output;
         }
 
-        public string GetKey()
+        private string GetKey()
         {
             return _settings.Value.ApiKey;
+        }
+
+        private string RusTime(Duration duration)
+        {
+            var time = duration.Text;
+            return time.Replace("min", "мин.").Replace("h", "ч").Replace("s","");
         }
     }
 }

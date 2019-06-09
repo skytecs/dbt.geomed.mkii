@@ -4,40 +4,26 @@ import { Organization } from "../models/organization";
 import { Observable } from "rxjs";
 import { from } from 'rxjs';
 import { map } from "rxjs/operators";
+import {ApiOrganizationsService} from "../../../../api/services/api-organizations.service";
 
 
 @Injectable()
 export class OrganizationsService {
-  private _httpClient: HttpClient;
-
-  public constructor(httpClient: HttpClient) {
-    this._httpClient = httpClient;
+  public constructor(private api: ApiOrganizationsService) {
   }
 
   public load = (): Observable<Array<Organization>> => {
 
-    const url = "api/organizations";
-    return this._httpClient.get<Array<OrganizationContract>>(url)
-      .pipe(
-        map((value: Array<OrganizationContract>): Array<Organization> => {
-          return value.map((x: OrganizationContract): Organization => this.createOrganization(x));
-        })
-      );
-  };
-
-  private createOrganization = (contract: OrganizationContract): Organization => {
-    const organization: Organization = new Organization(contract.id, contract.name, contract.address);
-
-    return organization;
+    return this.api.GetOrganizations().pipe(map(list => list.map(item => {
+      var result = new Organization(item.id);
+      result.address = item.address;
+      result.email = item.email;
+      result.lat = item.lat;
+      result.lgt = item.lng;
+      result.name = item.name;
+      return result;
+    })));
   };
 }
 
 
-
-class OrganizationContract {
-  public id: number;
-  public name: string;
-  public address: string;
-  public lat: number;
-  public lng: number;
-}
