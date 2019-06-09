@@ -110,12 +110,52 @@ namespace Dbt.Geomed.Controllers
         }
 
         [HttpGet]
-        [Route("api/categories")]
-        public IActionResult Book(CartViewModel cvm)
+        [Route("api/cartprices")]
+        [Produces(typeof(CartPricesViewModel))]
+        public async Task<IActionResult> GetCartPrices(List<long> priceIds)
         {
-            return Ok();
+            try
+            {
+                var prices = await _dataContext.Prices
+                    .Include(x => x.Service)
+                    .Include(x => x.Company)
+                    .Where(x => priceIds.Contains(x.Id))
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                return Ok(new CartPricesViewModel(prices));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+
+                return BadRequest(e.Message);
+            }
         }
 
+        public class CartPricesViewModel
+        {
+            public List<CartPrice> Prices { get; set; }
 
+            public CartPricesViewModel(List<Price> prices)
+            {
+                Prices = prices.Select(x => new CartPrice
+                {
+                    Name = x.Service.Name,
+                    Amount = x.Amount,
+                    Company = x.Company.Name,
+                    IsNhi = x.IsNhi
+                }).ToList();
+            }
+
+            public class CartPrice
+            {
+                public long Id { get; set; }
+                public string Name { get; set; }
+                public decimal Amount { get; set; }
+                public bool? IsNhi { get; set; }
+                public string Company { get; set; }
+            }
+        }
     }
 }

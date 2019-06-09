@@ -12,5 +12,11 @@ namespace Dbt.Geomed.Models
         public string Middlename { get; set; }
         public string Password { get; internal set; }
         public string Email { get; internal set; }
+
+
+        public string GetFullName()
+        {
+            return $"{Lastname} {Firstname} {Middlename}";
+        }
     }
 }
