@@ -13,6 +13,7 @@ namespace Dbt.Geomed.Services
         Task<string> GetAddress(Location location);
         Task<Location> GetLocation(string address);
         Task<List<CompanyDistance>> GetDistanceMatrix(Location location, List<Company> companies);
+        Task<byte[]> GetPicture(Location center, List<Location> locations, int zoom = 13);
     }
 
     public class PlusCode
