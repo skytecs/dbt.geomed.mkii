@@ -1,6 +1,9 @@
 <div class="panel panel-primary">
   <div class="panel-body">
     <h1>Выбор услуг</h1>
+    <div>
+      <input type="text" [(ngModel)]="filterString" (ngModelChange)="onFilterChange($event)"/>
+    </div>
     <ul>
       <li class="category" *ngFor="let item of categories">
         <label [innerHTML]="item.name"></label>

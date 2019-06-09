@@ -89,15 +89,15 @@ namespace Dbt.Geomed.Controllers
         [HttpGet]
         [Route("api/categories")]
         [Produces(typeof(CategoriesListViewModel))]
-        public IActionResult GetCagorieList()
+        public async Task<IActionResult> GetCategoriesList()
         {
             try
             {
-                var categories = _dataContext.Services
+                var categories = await _dataContext.Services
                     .Include(x => x.Category)
                     .Where(x => x.Category != null)
                     .AsNoTracking()
-                    .ToList();
+                    .ToListAsync();
 
                 return Ok(new CategoriesListViewModel(categories));
             }
@@ -107,6 +107,13 @@ namespace Dbt.Geomed.Controllers
 
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("api/categories")]
+        public IActionResult Book(CartViewModel cvm)
+        {
+            return Ok();
         }
 
 

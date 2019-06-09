@@ -8,10 +8,13 @@ namespace Dbt.Geomed.ViewModels
 {
     public class CategoriesListViewModel
     {
+
         public List<CategoryItem> Categories { get; set; }
 
         public CategoriesListViewModel(List<Service> services)
         {
+            Categories = new List<CategoryItem>();
+
             foreach (var category in services.GroupBy(x => x.Category))
             {
                 var categoryItem = new CategoryItem
@@ -26,6 +29,8 @@ namespace Dbt.Geomed.ViewModels
                     Code = x.GetCode(),
                     Name = x.Name
                 }).ToList());
+
+                Categories.Add(categoryItem);
             }
         }
     }
