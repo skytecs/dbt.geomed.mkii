@@ -14,3 +14,5 @@ export { Location } from './models/location';
 export { CategoriesListViewModel } from './models/categories-list-view-model';
 export { CategoryItem } from './models/category-item';
 export { CategoryServiceItem } from './models/category-service-item';
+export { CartPricesViewModel } from './models/cart-prices-view-model';
+export { CartPrice } from './models/cart-price';
