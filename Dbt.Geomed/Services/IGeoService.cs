@@ -7,15 +7,15 @@ using Newtonsoft.Json;
 
 namespace Dbt.Geomed.Services
 {
- 
+
     public interface IGeoService
     {
         Task<string> GetAddress(Location location);
         Task<Location> GetLocation(string address);
-        Task<GoogleDistanceMatrixResult> GetDistanceMatrix(Location location, List<Company> companies);
+        Task<List<CompanyDistance>> GetDistanceMatrix(Location location, List<Company> companies);
     }
-    
- public class PlusCode
+
+    public class PlusCode
     {
 
         [JsonProperty("compound_code")]
@@ -82,10 +82,10 @@ namespace Dbt.Geomed.Services
     {
 
         [JsonProperty("northeast")]
-        public  Northeast Northeast { get; set; }
+        public Northeast Northeast { get; set; }
 
         [JsonProperty("southwest")]
-        public  Southwest Southwest{ get; set; }
+        public Southwest Southwest { get; set; }
     }
 
     public class Geometry
@@ -120,7 +120,7 @@ namespace Dbt.Geomed.Services
         public string PlaceId { get; set; }
 
         [JsonProperty("plus_code")]
-        public  PlusCode PlusCode{ get; set; }
+        public PlusCode PlusCode { get; set; }
 
         [JsonProperty("types")]
         public IList<string> Types { get; set; }

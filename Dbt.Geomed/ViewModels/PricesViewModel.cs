@@ -1,4 +1,5 @@
 ﻿using Dbt.Geomed.Models;
+using Dbt.Geomed.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,19 @@ namespace Dbt.Geomed.ViewModels
 {
     public class PricesViewModel
     {
-        public PricesViewModel(List<Price> prices)
+        public PricesViewModel(List<Price> prices, List<Services.CompanyDistance> matrix)
         {
-            foreach (var commpany in prices.GroupBy(x => x.Company))
+            foreach (var company in prices.GroupBy(x => x.Company))
             {
-                var companyItem = new CompayItem
+                var companyItem = new CompanyItem
                 {
-                    Id = commpany.Key.Id,
-                    Name = commpany.Key.Name
+                    Id = company.Key.Id,
+                    Name = company.Key.Name,
+                    Location = matrix.FirstOrDefault(x=>x.CompanyId == company.Key.Id)?.Location,
+                    Distance = matrix.FirstOrDefault(x=>x.CompanyId == company.Key.Id)?.Distance,
                 };
 
-                foreach (var price in commpany)
+                foreach (var price in company)
                 {
                     var service = price.Service;
                     var serviceItem = new ServiceItem
@@ -26,7 +29,8 @@ namespace Dbt.Geomed.ViewModels
                         Id = service.Id,
                         Name = service.Name,
                         Code = service.GetCode(),
-                        Amount = price.Amount
+                        Amount = price.Amount,
+                        IsNhi = price.IsNhi ?? false
                     };
 
                     companyItem.Services.Add(serviceItem);
@@ -37,21 +41,16 @@ namespace Dbt.Geomed.ViewModels
 
         }
 
-        public List<CompayItem> Companies { get; set; }
+        public List<CompanyItem> Companies { get; set; }
     }
 
-    public class CompayItem
+    public class CompanyItem
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        private readonly List<ServiceItem> _services = new List<ServiceItem>();
-        public List<ServiceItem> Services
-        {
-            get
-            {
-                return _services;
-            }
-        }
+        public List<ServiceItem> Services { get; set; } = new List<ServiceItem>();
+        public double? Distance { get; set; }
+        public Location Location { get; set; }
     }
 
     public class ServiceItem
@@ -60,5 +59,6 @@ namespace Dbt.Geomed.ViewModels
         public string Name { get; set; }
         public object Code { get; set; }
         public decimal Amount { get; set; }
+        public bool IsNhi { get; set; }
     }
 }

@@ -1,3 +1,16 @@
 export { AuthModel } from './models/auth-model';
 export { LoggedInAccountModel } from './models/logged-in-account-model';
 export { RegisterModel } from './models/register-model';
+export { CompanyViewModel } from './models/company-view-model';
+export { GoogleDistanceMatrixResult } from './models/google-distance-matrix-result';
+export { Row } from './models/row';
+export { Element } from './models/element';
+export { Distance } from './models/distance';
+export { Duration } from './models/duration';
+export { PricesViewModel } from './models/prices-view-model';
+export { CompanyItem } from './models/company-item';
+export { ServiceItem } from './models/service-item';
+export { Location } from './models/location';
+export { CategoriesListViewModel } from './models/categories-list-view-model';
+export { CategoryItem } from './models/category-item';
+export { CategoryServiceItem } from './models/category-service-item';

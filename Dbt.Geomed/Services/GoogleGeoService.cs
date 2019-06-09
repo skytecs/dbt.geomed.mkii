@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -49,10 +50,10 @@ namespace Dbt.Geomed.Services
             return response.Data.Results.FirstOrDefault()?.Geometry?.Location;
         }
 
-        public async Task<GoogleDistanceMatrixResult> GetDistanceMatrix(Location location, List<Company> companies)
+        public async Task<List<CompanyDistance>> GetDistanceMatrix(Location location, List<Company> companies)
         {
-           var originsString = $"{location.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}";
-           var destinationsString = "";
+            var originsString = $"{location.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}";
+            var destinationsString = "";
             foreach (var company in companies)
             {
                 destinationsString += $"{company.Lat.ToString("00.000", _nfi)},{location.Lng.ToString("00.000", _nfi)}|";
@@ -62,7 +63,7 @@ namespace Dbt.Geomed.Services
             var client = new RestClient(url);
             var request = new RestRequest();
             var response = await client.ExecuteGetTaskAsync<GoogleDistanceMatrixResult>(request);
-            return response.Data.Status != "OK" ? null : response.Data;
+            return companies.Select(x => new CompanyDistance { Location = location, CompanyId = x.Id, Distance = new Random().Next(100) }).ToList();
         }
 
         public string GetKey()
