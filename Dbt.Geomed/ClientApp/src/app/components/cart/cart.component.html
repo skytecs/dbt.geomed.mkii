@@ -21,7 +21,7 @@
 
 
           <tbody>
-            <tr *ngFor="var item of cartItems">
+            <tr *ngFor="let item of cartItems">
               <td>
                 {{item.name}}
               </td>
@@ -32,18 +32,6 @@
                 {{item.company}} р.
 
                 <div style="color: gray" class="stats-desc">{{item.address}}</div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Кардиограмма
-              </td>
-              <td>
-                1200 р.
-              </td>
-              <td>
-                Медицинский центр «Меридиан»
-                <div style="color: gray" class="stats-desc">Ростов-на-Дону,пр.40-летия Победы, 316</div>
               </td>
             </tr>
           </tbody>

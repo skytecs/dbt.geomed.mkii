@@ -11,9 +11,13 @@ import { ApiServicesService, EmailNotificationsService } from 'src/app/api/servi
 export class CartComponent implements OnInit {
   private _location: Location;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+  constructor(private router: Router,
+    private activatedRoute: ActivatedRoute,
     private api: ApiServicesService,
-    private sender: EmailNotificationsService) { }
+    private sender: EmailNotificationsService,
+      location: Location) {
+    this._location = location;
+  }
 
   private _priceIds: Array<number> = [];
   public cartItems: Array<CartItem> = [];
@@ -39,7 +43,7 @@ export class CartComponent implements OnInit {
   }
 
   public submit() {
-    this.sender.NotifyCompanies({ Firstname: this.firstname, Lastname: this.lastname, Phone: this.phone, PriceIds: this._priceIds });
+    this.sender.NotifyCompanies({ Firstname: this.firstname, Lastname: this.lastname, Phone: this.phone, PriceIds: this._priceIds }).subscribe();
   }
 
 }
