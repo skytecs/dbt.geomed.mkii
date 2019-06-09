@@ -26,6 +26,7 @@ namespace Dbt.Geomed.Controllers
 
         [HttpPost]
         [Route("api/services")]
+        [Produces(typeof(PricesViewModel))]
         public IActionResult GetCompanyServicesInfo(ServicesListViewModel model)
         {
             try
@@ -49,6 +50,7 @@ namespace Dbt.Geomed.Controllers
 
         [HttpGet]
         [Route("api/services")]
+        [Produces(typeof(PricesViewModel))]
         public IActionResult GetServicesList(ServicesListViewModel model)
         {
             try
@@ -73,6 +75,7 @@ namespace Dbt.Geomed.Controllers
 
         [HttpGet]
         [Route("api/categories")]
+        [Produces(typeof(CategoriesListViewModel))]
         public IActionResult GetCagorieList()
         {
             try

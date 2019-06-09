@@ -19,7 +19,7 @@ namespace Dbt.Geomed.Services
     {
         Task<Token> Authenticate(string email, string password);
         Task<Token> Refresh(ClaimsPrincipal user);
-        Task<Token> Register(string email, string password);
+        Task<Token> Register(string email, string password, string lastname, string firstname);
         Task<User> Register(string name);
         Task<int> GetId(ClaimsPrincipal user);
 
@@ -139,7 +139,7 @@ namespace Dbt.Geomed.Services
 
         }
 
-        public async Task<Token> Register(string username, string password)
+        public async Task<Token> Register(string username, string password, string lastname, string firstname)
         {
             if (_dataContext.Users.Any(x => x.Email == username))
             {
@@ -149,7 +149,9 @@ namespace Dbt.Geomed.Services
             var customer = new User
             {
                 Email = username.ToLowerInvariant(),
-                Password = ComputeHash(password)
+                Password = ComputeHash(password),
+                Lastname = lastname,
+                Firstname = firstname
             };
 
             _dataContext.Users.Add(customer);

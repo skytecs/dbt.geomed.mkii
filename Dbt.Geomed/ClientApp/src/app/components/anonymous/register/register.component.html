@@ -15,25 +15,40 @@
   <div class="login-content">
     <form #f="ngForm" (ngSubmit)="formSubmit(f)" class="margin-bottom-0">
       <div class="form-group m-b-20">
-        <input type="text" class="form-control form-control-lg inverse-mode"
+        <input type="text" id="email" class="form-control form-control-lg inverse-mode"
                placeholder="Эл. почта" name="email" required
-
-                   [email]="true"
-                   [ngClass]="{'is-invalid': (submitted ||emailInput.dirty) && emailInput.invalid}"
-                   (ngModelChange)="resetValidity(f)"
-                   [required]="true"
-                   [(ngModel)]="email"
-                   #emailInput="ngModel"
-               />
+               [email]="true"
+               [ngClass]="{'is-invalid': (submitted ||emailInput.dirty) && emailInput.invalid}"
+               (ngModelChange)="resetValidity(f)"
+               [required]="true"
+               [(ngModel)]="email"
+               #emailInput="ngModel" />
       </div>
       <div class="form-group m-b-20">
-        <input type="password" class="form-control form-control-lg inverse-mode" placeholder="Пароль" name="password" required
-                   [(ngModel)]="password"
-                   #passwordInput="ngModel"
-                   [ngClass]="{'is-invalid': (submitted ||passwordInput.dirty) && passwordInput.invalid}"
-                   (ngModelChange)="resetValidity(f)"
-                   [required]="true"
-               />
+        <input type="text" id="firstname" class="form-control form-control-lg inverse-mode"
+               placeholder="Имя" name="firstname" required
+               [ngClass]="{'is-invalid': (submitted ||firstnameInput.dirty) && firstnameInput.invalid}"
+               (ngModelChange)="resetValidity(f)"
+               [required]="true"
+               [(ngModel)]="firstname"
+               #firstnameInput="ngModel" />
+      </div>
+      <div class="form-group m-b-20">
+        <input type="text" id="lastname" class="form-control form-control-lg inverse-mode"
+               placeholder="Фамилия" name="lastname" required
+               [ngClass]="{'is-invalid': (submitted ||lastnameInput.dirty) && lastnameInput.invalid}"
+               (ngModelChange)="resetValidity(f)"
+               [required]="true"
+               [(ngModel)]="lastname"
+               #lastnameInput="ngModel" />
+      </div>
+      <div class="form-group m-b-20">
+        <input type="password" id="password" class="form-control form-control-lg inverse-mode" placeholder="Пароль" name="password" required
+               [(ngModel)]="password"
+               #passwordInput="ngModel"
+               [ngClass]="{'is-invalid': (submitted ||passwordInput.dirty) && passwordInput.invalid}"
+               (ngModelChange)="resetValidity(f)"
+               [required]="true" />
       </div>
       <div class="login-buttons">
         <button type="submit" class="btn btn-success btn-block btn-lg">Регистрация</button>

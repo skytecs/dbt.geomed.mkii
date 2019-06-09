@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, Renderer2, OnDestroy } from '@angular/core';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 @Component({
   selector: 'header',
   templateUrl: './header.component.html'
@@ -21,7 +22,11 @@ export class HeaderComponent implements OnDestroy {
 
   ngOnDestroy() { }
 
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2, private auth: AuthenticationService) {
+    
+  }
 
+  public isAuthenticated(): boolean {
+    return this.auth.authorized();
   }
 }

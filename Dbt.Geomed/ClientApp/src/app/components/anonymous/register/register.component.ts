@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgForm, NgModel } from '@angular/forms';
+import { NgForm, NgModel, AbstractControl } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { first } from 'rxjs/operators';
 
@@ -46,15 +46,28 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   public get submitted(): boolean { return this._submitted; }
 
+  public resetValidity = (f: NgForm): void => {
+    this.resetControlValidity(f.controls["email"], "invalid");
+    this.resetControlValidity(f.controls["password"], "invalid");
+  }
+
+  private resetControlValidity = (control: AbstractControl, error: string): void => {
+    const err = control.errors; // get control errors
+    if (err) {
+      delete err[error]; // delete your own error
+      if (!Object.keys(err).length) { // if no errors left
+        control.setErrors(null); // set control errors to null making it VALID
+      } else {
+        control.setErrors(err); // controls got other errors so set them back
+      }
+
+    }
+  }
+
   formSubmit(f: NgForm) {
 
     this.loading = true;
     this._submitted = true;
-
-    if (this.email !== this.repeatEmail) {
-      f.controls["repeatEmail"].setErrors({ notEqual: true });
-    }
-
 
     if (f.valid) {
       this.authenticationService.register(f.value["firstname"], f.value["lastname"], f.value["email"], f.value["password"]).pipe(

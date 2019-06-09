@@ -17,5 +17,7 @@ namespace Dbt.Geomed.Models
         public virtual Service Service { get; set; }
 
         public decimal Amount { get; set; }
+
+        public bool IsNhi { get; set; }
     }
 }

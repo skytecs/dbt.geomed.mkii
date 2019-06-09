@@ -8,10 +8,10 @@
   <!-- begin header-nav -->
   <ul class="navbar-nav navbar-right">
 
-    <li class="dropdown navbar-user" ngbDropdown>
+    <li *ngIf="isAuthenticated()" class="dropdown navbar-user" ngbDropdown>
       <a href="javascript:;" class="dropdown-toggle" ngbDropdownToggle>
-        <img src="/assets/img/user/user-13.jpg" alt="" />
-        <span class="d-none d-md-inline">Adam Schwartz</span> <b class="caret"></b>
+        <img src="/assets/img/user.jpg" alt="" />
+        <span class="d-none d-md-inline">Администрирование</span> <b class="caret"></b>
       </a>
       <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
         <a class="dropdown-item"
@@ -24,6 +24,12 @@
         </a>
 
       </div>
+    </li>
+    <li *ngIf="!isAuthenticated()" class="dropdown navbar-user" ngbDropdown>
+      <a [routerLink]="['/login']">
+        <img src="/assets/img/user.jpg" alt="" />
+        <span class="d-none d-md-inline">Вход</span> <b class="caret"></b>
+      </a>
     </li>
 
   </ul>

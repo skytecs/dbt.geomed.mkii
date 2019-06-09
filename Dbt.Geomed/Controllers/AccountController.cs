@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -86,21 +87,11 @@ namespace Dbt.Geomed.Controllers
         [Produces(typeof(LoggedInAccountModel))]
         public async Task<IActionResult> Register([FromBody]RegisterModel model)
         {
-            if (String.IsNullOrWhiteSpace(model.Email))
-            {
-                return BadRequest("email is required");
-            }
-
-            if (String.IsNullOrWhiteSpace(model.Password))
-            {
-                return BadRequest("password is required");
-            }
-
             Token token;
 
             try
             {
-                token = await _manager.Register(model.Email, model.Password);
+                token = await _manager.Register(model.Email, model.Password, model.Lastname, model.Firstname);
             }
             catch (InvalidOperationException ex)
             {
@@ -173,15 +164,21 @@ namespace Dbt.Geomed.Controllers
 
         public class RegisterModel
         {
+            [Required]
             public string Firstname { get; set; }
+            [Required]
             public string Lastname { get; set; }
+            [Required]
             public string Email { get; set; }
+            [Required]
             public string Password { get; set; }
         }
 
         public class AuthModel
         {
+            [Required]
             public string Email { get; set; }
+            [Required]
             public string Password { get; set; }
         }
 
